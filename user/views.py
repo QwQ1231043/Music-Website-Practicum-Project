@@ -27,6 +27,12 @@ def user_flavorite(request):
 
 def user_likes(request):
     likes_videoes=likess.objects.all()
+    if 'delete' in request.POST:
+        video_id=request.POST.get('video_id')
+        print(video_id)
+        video=likes_videoes.filter(id=video_id)
+        video.delete()
+        return redirect('user:likes')
     context={'likes_videoes':likes_videoes}
     return render(request,'likes.html',context)
 
