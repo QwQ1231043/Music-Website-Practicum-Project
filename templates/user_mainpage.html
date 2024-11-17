@@ -1,0 +1,31 @@
+{% extends 'mainpage_template.html' %}
+{% block body1 %}
+       <p>Welcome {{ user.username }}</p>
+{% for obj in videos %}
+<div class="col">
+    <div class="card shadow-sm">
+        <div class="card-img-top" style="position: relative; overflow: hidden;">
+            <video width="100%" height="225" controls>
+                <source src="{{ obj.video.url }}" type="video/mp4">
+              
+            </video>
+        </div>
+        
+        <div class="card-body" >
+            <p class="card-text" style="min-height: 30px; min-width: 700px"></p>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="video_id" value="{{ obj.id }}">
+                    <button type="submit" class="btn btn-sm btn-outline-secondary" name="like">Like</button>
+                    <button type="submit" class="btn btn-sm btn-outline-secondary" name="favorite">Add Favorites</button>
+                    </form>
+                </div>
+                <small class="text-body-secondary">Publish by {{ obj.upload_time }}<br> Publish user: {{ obj.user.username }}</small>
+            </div>
+        </div>
+    </div>
+</div>
+    {% endfor %}
+{% endblock %}

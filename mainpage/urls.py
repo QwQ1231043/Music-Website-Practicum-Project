@@ -1,0 +1,13 @@
+from django.urls import path,include
+from mainpage import views
+# Create your tests here.
+
+app_name = 'mainpage'
+urlpatterns=[
+    path('mainpage', views.mainpage_template, name='mainpage'),
+    path('sign_in',views.sign_in,name='sign_in'),
+    path('sign_up',views.sign_up,name='sign_up'),
+    path('sign_out',views.sign_out,name='sign_out'),
+    path('Management',views.Management,name='Management'),
+    path('user_mainpage',views.user_mainpage,name='user_mainpage'),
+]

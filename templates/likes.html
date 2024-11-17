@@ -1,0 +1,11 @@
+{% extends 'mainpage_template.html' %}
+{% block body1 %}
+    {% for obj in likes_videoes %}
+        <p>{{ obj.user.username }}</p>
+                <video width="100%" height="225" controls>
+                <source src="{{ obj.video.video.url }}" type="video/mp4">
+            </video>
+    {% endfor %}
+{% endblock %}
+
+

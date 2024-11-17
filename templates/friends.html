@@ -1,0 +1,50 @@
+{% extends 'mainpage_template.html' %}
+{% block body1 %}
+    
+    {% if target %}
+    <form action="" method="post">
+    <p>This is your friend page</p>
+    <input class="form-control me-2" type="search" 
+           placeholder="Search" aria-label="Search" name="email">
+    
+    <button class="btn btn-outline-success" type="submit">
+        Search</button>
+        <br>
+        <p>The target user you want to find is {{ target }}, do you want to add him?</p>
+    </form>
+        <form action="" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="email" value="{{ target.email }}">
+            <button class="btn btn-outline-success" type="submit" name="add" value="add">add</button>
+        </form>
+        {{ error2 }}
+             {% include 'friendlist.html' with friend_list=friend_list %}
+        
+        {% elif error %}
+            <form action="" method="post">
+    <p>This is your friend page</p>
+    <input class="form-control me-2" type="search" 
+           placeholder="Search" aria-label="Search" name="email">
+    <button class="btn btn-outline-success" type="submit">
+        Search</button>
+                <p>Sorry, the user you input does not exist, please try again?</p>
+    </form>
+              {% include 'friendlist.html' %}
+        
+        
+        
+        {% else %}
+               <form action="" method="post">
+    <p>This is your friend page</p>
+    <input class="form-control me-2" type="search" 
+           placeholder="Search" aria-label="Search" name="email">
+    
+    <button class="btn btn-outline-success" type="submit">
+        Search</button>
+    </form>
+              {% include 'friendlist.html' %}
+        
+        
+        
+    {% endif %}
+{% endblock %}

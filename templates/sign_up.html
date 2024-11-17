@@ -1,0 +1,44 @@
+{% extends 'mainpage_template.html' %}
+    {% block body2 %}
+        <style>
+        input{
+          width:200px;
+            height:30px
+        }
+        </style>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div style="row-gap: 30px">
+        </div>
+ <div class="col-12">
+
+          <label for="User name" class="form-label">User name</label>
+          <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="" name="username">
+          <div class="invalid-feedback">
+            Please enter a correct user name
+          </div>
+        </div>
+    <div class="col-12">
+          <label for="Email" class="form-label">Email</label>
+          <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="" name="email">
+          <div class="invalid-feedback">
+            Please enter a correct email address
+          </div>
+        </div>
+    <div class="col-12">
+          <label for="Password" class="form-label">Password</label>
+          <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="" name="password">
+          <div class="invalid-feedback">
+            Please enter a correct password (no longer than 120 letters).
+          </div>
+        </div>
+    <div class="col-12">
+          <label for="address" class="form-label">Address</label>
+          <input type="text" class="form-control" id="address" placeholder="1234 Main St" name="age">
+        </div>
+        <br>
+<input type="submit" value="submit">
+    
+    </form>
+
+    {% endblock %}
