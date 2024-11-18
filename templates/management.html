@@ -11,6 +11,10 @@
         {{ video.title }}
         {{ video.description }}
         {{ video.video }}
+              <form action="" method="post">
+         <input type="hidden" name="video_id" value="{{ video.id }}">
+            <button type="submit" class="btn btn-sm btn-outline-secondary" name="delete">Delete</button>
+        </form>
         <video width="320" height="240" controls>
             <source src="{{ video.video.url }}" type="video/mp4"></video>
     {% endfor %}

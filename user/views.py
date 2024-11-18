@@ -50,6 +50,11 @@ def user_management(request):
             object.save()
             print("save successfully done")
             return render(request,'management.html',context={'object':object})
+        if 'delete' in request.POST:
+            video_id=request.POST.get('video_id')
+            video=management.objects.filter(id=video_id)
+            video.delete()
+            return redirect('user:management')
     videos=management.objects.filter(user=request.user)
     print('gg')
     return render(request,'management.html',context={'videos':videos})
@@ -70,7 +75,7 @@ def user_friends(request):
                 if not friends.objects.filter(user=request.user,friends=target).exists():
                     friends.objects.create(user=request.user,friends=target)
                     judgement=False
-                    return redirect('friends')
+                    return redirect('user:friends')
                 else:
                     context={
                         'target':target,
