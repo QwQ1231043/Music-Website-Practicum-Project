@@ -10,4 +10,5 @@ urlpatterns=[
     path('sign_out',views.sign_out,name='sign_out'),
     path('Management',views.Management,name='Management'),
     path('user_mainpage',views.user_mainpage,name='user_mainpage'),
+    path('check_verification',views.check_verification,name='check_verification'),
 ]

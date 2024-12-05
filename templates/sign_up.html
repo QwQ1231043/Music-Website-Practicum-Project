@@ -1,44 +1,55 @@
 {% extends 'mainpage_template.html' %}
-    {% block body2 %}
-        <style>
-        input{
-          width:200px;
-            height:30px
-        }
-        </style>
-    <form action="" method="post">
-        {% csrf_token %}
-        <div style="row-gap: 30px">
-        </div>
- <div class="col-12">
 
-          <label for="User name" class="form-label">User name</label>
-          <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="" name="username">
-          <div class="invalid-feedback">
-            Please enter a correct user name
-          </div>
-        </div>
+{% block body2 %}
+ 
+<form method="post">
+    {% csrf_token %}
+    <div style="min-width: 350px">
     <div class="col-12">
-          <label for="Email" class="form-label">Email</label>
-          <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="" name="email">
-          <div class="invalid-feedback">
-            Please enter a correct email address
-          </div>
-        </div>
-    <div class="col-12">
-          <label for="Password" class="form-label">Password</label>
-          <input type="text" class="form-control" id="address" placeholder="1234 Main St" required="" name="password">
-          <div class="invalid-feedback">
-            Please enter a correct password (no longer than 120 letters).
-          </div>
-        </div>
-    <div class="col-12">
-          <label for="address" class="form-label">Address</label>
-          <input type="text" class="form-control" id="address" placeholder="1234 Main St" name="age">
-        </div>
-        <br>
-<input type="submit" value="submit">
-    
-    </form>
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" id="username" name="username" value="{{ form.username.value }}">
+  
+    </div>
 
-    {% endblock %}
+    <div class="col-12">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{ form.email.value }}">
+ 
+    </div>
+
+    <div class="col-12">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name="password" value="{{ form.password.value }}">
+  
+    </div>
+
+    <div class="col-12">
+        <label for="password2" class="form-label">Confirm Password</label>
+        <input type="password" class="form-control" id="password2" name="password2" value="{{ form.password2.value }}">
+ 
+    </div>
+
+    <div class="col-12">
+        <label for="age" class="form-label">Age</label>
+        <input type="text" class="form-control" id="age" name="age" value="{{ form.age.value }}">
+ 
+    </div>
+    </div>
+    <br>
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+            
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% if error_message1 %}
+        <div class="alert alert-danger">
+        <p>{{ error_message }}</p>
+        </div>
+    {% endif %}
+    <br>
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}

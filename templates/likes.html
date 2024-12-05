@@ -1,15 +1,25 @@
 {% extends 'mainpage_template.html' %}
 {% block body1 %}
-    {% for obj in likes_videoes %}
-        <p>{{ obj.user.username }}</p>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start;">
+{% for obj in likes_videoes %}
+    <div class="border p-2"> 
+    
+        <video width="420" height="225" controls>
+            <source src="{{ obj.video.video.url }}" type="video/mp4">
+        </video>
+        <div style="display:flex; flex-direction: column-reverse">
+        <p>video title:{{ obj.video.title }}</p>
+        <p>video description:{{ obj.video.description }}</p>
+        <p>uploader:{{ obj.video.user.username }}</p>
+        </div>
         <form action="" method="post">
-         <input type="hidden" name="video_id" value="{{ obj.id }}">
-            <button type="submit" class="btn btn-sm btn-outline-secondary" name="delete">Delete</button>
+        <input type="hidden" name="video_id" value="{{ obj.id }}">
+        <button type="submit" class="btn btn-sm btn-outline-secondary" name="delete">Delete</button>
         </form>
-                <video width="100%" height="225" controls>
-                <source src="{{ obj.video.video.url }}" type="video/mp4">
-            </video>
-    {% endfor %}
+    
+    </div>
+{% endfor %}
+</div>
 {% endblock %}
 
 

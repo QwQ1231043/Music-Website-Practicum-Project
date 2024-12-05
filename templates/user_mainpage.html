@@ -1,31 +1,84 @@
 {% extends 'mainpage_template.html' %}
 {% block body1 %}
        <p>Welcome {{ user.username }}</p>
-{% for obj in videos %}
-<div class="col">
-    <div class="card shadow-sm">
-        <div class="card-img-top" style="position: relative; overflow: hidden;">
-            <video width="100%" height="225" controls>
-                <source src="{{ obj.video.url }}" type="video/mp4">
-              
-            </video>
-        </div>
-        
-        <div class="card-body" >
-            <p class="card-text" style="min-height: 30px; min-width: 700px"></p>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="video_id" value="{{ obj.id }}">
-                    <button type="submit" class="btn btn-sm btn-outline-secondary" name="like">Like</button>
-                    <button type="submit" class="btn btn-sm btn-outline-secondary" name="favorite">Add Favorites</button>
-                    </form>
+    
+<script>
+    function submitFavoriteForm(folderId, videoId) {
+
+        document.getElementById('video_id').value = videoId;
+        document.getElementById('folder_id').value = folderId;
+
+
+        document.getElementById('submit-favorite-form').click();
+    }
+</script>
+<style>
+.d-flex button {
+    height: 35px; 
+}
+    </style>
+<div class="container">
+    <div class="row" style="display: flex; flex-wrap: wrap; gap: 10px;">
+        {% for obj in videos %}
+        <div class="col-auto" style="width: 670px;">
+            <div class="card shadow-sm" style="width: 100%;">  
+
+                <div class="card-img-top" style="position: relative; overflow: hidden;">
+                    <video width="100%" height="225" controls>
+                        <source src="{{ obj.video.url }}" type="video/mp4">
+                    </video>
                 </div>
-                <small class="text-body-secondary">Publish by {{ obj.upload_time }}<br> Publish user: {{ obj.user.username }}</small>
+                <div class="card-body">
+                    <h5 class="card-title"> Title: {{ obj.title }}</h5>
+                    <p class="card-text">Description: {{ obj.description }}</p>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <div class="d-flex gap-3">
+                                <div class="d-flex gap-3">
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="video_id" value="{{ obj.id }}">
+                                <button type="submit" class="btn btn-sm btn-outline-secondary" name="like">Like</button>
+                            </form>
+                        </div>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Add to favorites
+                                </button>
+                                <div class="dropdown-menu">
+                                    {% for folder in folders %}
+                                 <a class="dropdown-item" href="#" onclick="submitFavoriteForm('{{ folder.id }}', '{{ obj.id }}')">
+                                 {{ folder.title }}
+                                </a>
+                                    {% empty %}
+                                    <a class="dropdown-item" href="#">No folders available</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                        </div>
+                        <form id="favorite-form" action="" method="post" style="display: none;">
+    {% csrf_token %}
+    <input type="hidden" name="video_id" id="video_id">
+    <input type="hidden" name="folder_id" id="folder_id">
+    <button type="submit" id="submit-favorite-form" name="favorite" style="display: none;"></button> <!-- Hidden button -->
+</form>
+                        <div class="btn-group">
+                            <small class="text-body-secondary">Published by {{ obj.upload_time }}<br> Published by: {{ obj.user.username }}</small>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        {% endfor %}
     </div>
 </div>
-    {% endfor %}
+{% endblock %}
+{% block body3 %}
+    <p>username</p>
 {% endblock %}

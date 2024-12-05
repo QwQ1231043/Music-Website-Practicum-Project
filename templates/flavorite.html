@@ -1,1 +1,19 @@
 {% extends 'mainpage_template.html' %}
+{% block body1 %}
+    {% for obj in folders %}
+        <p>{{ obj.title }}</p>
+        {% for objs in obj.video.all %}
+            <video width="100%" height="225" controls>
+                                <source src="{{ objs.video.url }}" type="video/mp4">
+                            </video>
+            <p>{{ objs.title }}</p>
+            {% endfor %}
+    {% endfor %}
+        <h3>Create new folders</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="title">Folder title:</label>
+        <input type="text" name="title" required>
+        <button type="submit" name="create_folder">Create Folder</button>
+    </form>
+{% endblock %}

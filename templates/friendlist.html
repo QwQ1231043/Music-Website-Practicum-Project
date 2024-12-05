@@ -5,10 +5,14 @@
     <title>Title</title>
 </head>
 <body>
-<p>Here are the friend list</p>
-{% for username in friend_list %}
-    <br>  <br>{{ username }}
-{% endfor %}
+<p>Here is your friend list</p>
+{% for username,useremail in friend %}
 
+            <ul class="list-group list-group-flush" style="width:500px">
+  <li class="list-group-item">   Username: {{ username }} <br>Useremail: {{useremail }}</li>
+  <li class="list-group-item"></li>
+</ul>
+
+{% endfor %}
 </body>
 </html>

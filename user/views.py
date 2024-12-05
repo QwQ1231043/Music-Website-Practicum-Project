@@ -3,7 +3,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django import forms
 from user.forms import Video
-from user.models import user_information,friends,management,likess
+from user.models import user_information,friends,management,likess,like,folderss
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -22,19 +22,37 @@ def profile(request):
     }
     return render(request,'profile.html',context)
 
+
 def user_flavorite(request):
-    return render(request,'flavorite.html')
+    default_folder=folderss(user=request.user,title='default')
+    correction=folderss.objects.filter(user=request.user,title='default')
+    if not correction.exists():
+        default_folder.save()
+    if 'create_folder' in request.POST:
+        title = request.POST.get('title')
+        if title:
+            new_folder=folderss.objects.create(user=request.user,title=title)
+            new_folder.save()
+            return redirect('user:flavorite')
+    folders = folderss.objects.filter(user=request.user)
+    context={
+        'folders':folders,
+    }
+    return render(request,'flavorite.html',context)
+
 
 def user_likes(request):
-    likes_videoes=likess.objects.all()
-    if 'delete' in request.POST:
-        video_id=request.POST.get('video_id')
-        print(video_id)
-        video=likes_videoes.filter(id=video_id)
-        video.delete()
-        return redirect('user:likes')
-    context={'likes_videoes':likes_videoes}
-    return render(request,'likes.html',context)
+    if request.user.is_authenticated:
+        likes_videoes=likess.objects.filter(user=request.user)
+        if 'delete' in request.POST:
+            video_id = request.POST.get('video_id')
+            print(video_id)
+            video = likes_videoes.filter(id=video_id)
+            video.delete()
+            return redirect('user:likes')
+        context = {'likes_videoes': likes_videoes}
+        return render(request, 'likes.html', context)
+    return redirect('user:login')
 
 @login_required
 def user_management(request):
@@ -62,7 +80,11 @@ def user_management(request):
 
 def user_friends(request):
     friendss=friends.objects.filter(user=request.user)
-    friend_list=[friend.friends.username for friend in friendss]
+    username=[friend.friends.username for friend in friendss]
+    useremail=[friend.friends.email for friend in friendss]
+    friend=zip(username,useremail)
+    print(username)
+    print(useremail)
     if request.method=='POST':
         email=request.POST['email']
         if User.objects.filter(email=email).exists():
@@ -86,4 +108,7 @@ def user_friends(request):
         error= True;
         print(error)
         return  render(request,'friends.html',context={'error':error})
-    return render(request,'friends.html',context={'friend_list':friend_list})
+    return render(request,'friends.html',context={'friend':friend})
+
+
+

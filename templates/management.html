@@ -1,7 +1,44 @@
 {% extends 'mainpage_template.html' %}
 {% block body1 %}
+<style>
+    .drop-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100px;
+        border: 2px dashed #007bff;
+        background-color: #f8f9fa;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+    }
 
+    .drop-title {
+        font-size: 1.2rem;
+        color: #007bff;
+    }
+
+    .file-block {
+        display: none;
+    }
+
+    .file-block:focus {
+        outline: none;
+    }
+
+    .drop-container:hover {
+        background-color: #e9ecef;
+    }
+
+    .drop-container.dragover{
+        background-color: #d6e9f8;
+        border-color: #0056b3;
+    }
+</style>
     
+
+    <div style="max-width: 500px">
     <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
         <div class="mb-3">
@@ -13,27 +50,91 @@
   <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="description"
             placeholder="please write your description here"></textarea>
 </div>
-        <div class="mb-3">
-  <label for="formFile" class="form-label">Default file input example</label>
-  <input class="form-control" type="file" id="formFile" name="video">
+        
+ <div class="mb-3">
+    <label for="video" class="drop-container">
+        <span class="drop-title">Drag files to here or click select file</span>
+        <input class="file file-block" type="file" id="video" required="" name="video">
+    </label>
+  
+    <div id="file-name" style="margin-top: 10px; color: #007bff;"></div>
 </div>
+
+<script>
+
+const dropContainer = document.querySelector('.drop-container');
+const fileInput = document.getElementById('video');
+const fileNameDisplay = document.getElementById('file-name'); 
+
+
+dropContainer.addEventListener('click', function() {
+    fileInput.click();
+});
+
+
+dropContainer.addEventListener('dragover', function(e) {
+    e.preventDefault(); 
+    dropContainer.classList.add('dragover'); 
+});
+
+dropContainer.addEventListener('drop', function(e) {
+    e.preventDefault(); 
+    dropContainer.classList.remove('dragover'); 
+    const files = e.dataTransfer.files; 
+    if (files.length > 0) {
+        fileInput.files = files; 
+        displayFileName(files[0]); 
+    }
+});
+
+
+fileInput.addEventListener('change', function() {
+    const files = fileInput.files;
+    if (files.length > 0) {
+        displayFileName(files[0]); 
+    }
+});
+
+
+function displayFileName(file) {
+    const fileName = file.name; 
+    fileNameDisplay.textContent = `文件名: ${fileName}`; 
+}
+</script>
+        
     <input type="submit" value="submit">
     </form>
-    <br>    <br>    <br>
-    <div style="display: flex;flex-direction: row;gap:20px; flex-wrap: wrap;">
-    {% for video in videos %}
-        <div style="flex:1 1 300px"> 
-        {{ video.title }}
-        {{ video.description }}
-              <form action="" method="post">
-                    {% csrf_token %}
-         <input type="hidden" name="video_id" value="{{ video.id }}">
-            <button type="submit" class="btn btn-sm btn-outline-secondary" name="delete">Delete</button>
-        </form>
-        <video width="320" height="240" controls>
-            <source src="{{ video.video.url }}" type="video/mp4"></video>
-        </div>
-    {% endfor %}
     </div>
+    
+    
+    
 
+
+
+<div id="file-preview"></div>
+    
+    
+    
+    
+    <br>    <br>    <br>
+    
+<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start;">
+  {% for video in videos %}
+    <div class="card" style="width: 320px;">
+      <video width="320" height="240" controls>
+        <source src="{{ video.video.url }}" type="video/mp4">
+      </video>
+      <div class="card-body" style="padding-bottom: 5px; height: auto; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
+        <h5 class="card-title">Title: {{ video.title }}</h5>
+        <p class="card-text">Video Description: {{ video.description }}</p>
+        <form action="" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="video_id" value="{{ video.id }}">
+          <button type="submit" class="btn btn-sm btn-outline-secondary" name="delete">Delete</button>
+        </form>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+    
 {% endblock %}

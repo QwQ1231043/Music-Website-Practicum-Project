@@ -36,3 +36,16 @@ class likess(models.Model):
     video=models.ForeignKey(management,on_delete=models.CASCADE)
     like_time=models.DateTimeField(auto_now_add=True)
 
+class folderss(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    title=models.CharField(max_length=200)
+    video = models.ManyToManyField(management, blank=True)
+    def _str_(self):
+        return self.title
+
+class favorites(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    video=models.ManyToManyField(management,blank=True)
+    folder=models.ForeignKey(folderss,on_delete=models.CASCADE,default=None)
+    add_time=models.DateTimeField(auto_now_add=True)
+
