@@ -49,3 +49,13 @@ class favorites(models.Model):
     folder=models.ForeignKey(folderss,on_delete=models.CASCADE,default=None)
     add_time=models.DateTimeField(auto_now_add=True)
 
+class management_folders(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    title=models.CharField(max_length=200)
+    videos=models.ManyToManyField(management, blank=True)
+
+class avatars(models.Model):
+    user=models.OneToOneField(User,on_delete=models.CASCADE)
+    avatar=models.ImageField(upload_to="avatars/",default='avatars/default.jpg')
+    def __str__(self):
+        return self.user.username

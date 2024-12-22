@@ -1,140 +1,248 @@
 {% extends 'mainpage_template.html' %}
+
 {% block body1 %}
+<!-- CSS 样式 -->
 <style>
     .drop-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        position: relative;
         width: 100%;
-        height: 100px;
-        border: 2px dashed #007bff;
-        background-color: #f8f9fa;
-        padding: 20px;
+        height: 150px;
+        border: 3px solid transparent;
+        border-radius: 12px;
+        background-image: linear-gradient(45deg, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.2));
         text-align: center;
+        padding: 30px 15px;
         cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 15px rgba(0, 123, 255, 0.1);
+    }
+
+    .drop-container:hover {
+        background-image: linear-gradient(45deg, rgba(0, 123, 255, 0.15), rgba(0, 123, 255, 0.3));
+        border-color: #007bff;
+        transform: scale(1.05);
+    }
+
+    .drop-container.dragover {
+        background-image: linear-gradient(45deg, rgba(0, 123, 255, 0.3), rgba(0, 123, 255, 0.4));
+        border-color: #0056b3;
     }
 
     .drop-title {
         font-size: 1.2rem;
         color: #007bff;
+        font-weight: 500;
     }
 
     .file-block {
         display: none;
     }
 
-    .file-block:focus {
-        outline: none;
+    #file-name {
+        margin-top: 10px;
+        color: #007bff;
+        font-size: 1rem;
+        font-weight: 400;
     }
 
-    .drop-container:hover {
-        background-color: #e9ecef;
+    .input-group-text {
+        font-size: 1rem;
     }
 
-    .drop-container.dragover{
-        background-color: #d6e9f8;
-        border-color: #0056b3;
+    .error-message {
+        color: red;
+    }
+    
+    .video-item {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin-right: 20px; /* Space between videos */
+        width: 450px; /* Fixed width for video items */
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .video-item:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 6px 15px rgba(0, 123, 255, 0.2);
+    }
+
+    .video-item img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .video-item .video-title {
+        font-size: 1.1rem;
+        font-weight: bold;
+        padding: 15px;
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .video-item .video-desc {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+        color: #333;
+    }
+
+    .video-item .video-container {
+        position: relative;
+    }
+
+    .btn-dropdown-custom {
+        border-radius: 5px;
+        font-weight: 500;
+    }
+
+    .dropdown-menu {
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Flexbox container for videos */
+    .video-container {
+        display: flex;
+        flex-wrap: wrap;  /* Allows the videos to move to the next row if space is not enough */
+        gap: 20px;
+        justify-content: flex-start;
+        margin-top: 20px;
+    }
+
+    .dropdown-toggle {
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 5px;
+        font-weight: 500;
+    }
+
+    .dropdown-menu {
+        border-radius: 5px;
+        padding: 0;
     }
 </style>
-    
 
-    <div style="max-width: 500px">
-    <form action="" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-        <div class="mb-3">
-  <label for="exampleFormControlInput1" class="form-label">Title</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="title" name="title">
-</div>
-<div class="mb-3">
-  <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="description"
-            placeholder="please write your description here"></textarea>
-</div>
-        
- <div class="mb-3">
-    <label for="video" class="drop-container">
-        <span class="drop-title">Drag files to here or click select file</span>
-        <input class="file file-block" type="file" id="video" required="" name="video">
-    </label>
-  
-    <div id="file-name" style="margin-top: 10px; color: #007bff;"></div>
-</div>
+<!-- HTML 内容 -->
+<div style="max-width: 500px">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
 
-<script>
+        <div class="d-flex">
+            <!-- Left Section: Title, Description, and Video Upload -->
+            <div class="flex-fill me-4" style="max-width: 600px;min-width: 500px">
+                <!-- Title Input -->
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Title" name="title" required>
+                </div>
 
-const dropContainer = document.querySelector('.drop-container');
-const fileInput = document.getElementById('video');
-const fileNameDisplay = document.getElementById('file-name'); 
+                <!-- Description Input -->
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="description" placeholder="Please enter a description" required></textarea>
+                </div>
 
+                <!-- Video Upload -->
+                <div class="mb-3">
+                    <label for="video" class="drop-container">
+                        <span class="drop-title">Drag your file here or click to select</span>
+                        <input class="file-block" type="file" id="video" name="video" required>
+                    </label>
+                    <div id="file-name" style="margin-top: 10px;"></div>
+                </div>
+            </div>
 
-dropContainer.addEventListener('click', function() {
-    fileInput.click();
-});
+            <!-- Right Section: Folder Selection -->
+            <div class="flex-fill" style="max-width: 300px; margin-left: 50px">
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="inputGroupSelect01">Choose the folder where you want to place your videos:</label>
+                    <select class="form-select" id="inputGroupSelect01" name="folder_id">
+                        <option value="" {% if not selected_folder %}selected{% endif %}>Skip selecting existing folder</option>
+                        {% for folder in folders %}
+                            <option value="{{ folder.id }}" {% if selected_folder and selected_folder.id == folder.id %}selected{% endif %}>{{ folder.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
+                <!-- Create New Folder Input -->
+                <div id="new-folder-container" class="mb-3">
+                    <label for="new_folder_title" class="form-label">Create a new folder (make sure you choose skip selecting folder):</label>
+                    <input type="text" class="form-control" id="new_folder_title" name="new_folder_title" placeholder="Enter new folder name">
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+            </div>
+        </div>
 
-dropContainer.addEventListener('dragover', function(e) {
-    e.preventDefault(); 
-    dropContainer.classList.add('dragover'); 
-});
-
-dropContainer.addEventListener('drop', function(e) {
-    e.preventDefault(); 
-    dropContainer.classList.remove('dragover'); 
-    const files = e.dataTransfer.files; 
-    if (files.length > 0) {
-        fileInput.files = files; 
-        displayFileName(files[0]); 
-    }
-});
-
-
-fileInput.addEventListener('change', function() {
-    const files = fileInput.files;
-    if (files.length > 0) {
-        displayFileName(files[0]); 
-    }
-});
-
-
-function displayFileName(file) {
-    const fileName = file.name; 
-    fileNameDisplay.textContent = `文件名: ${fileName}`; 
-}
-</script>
-        
-    <input type="submit" value="submit">
+        <!-- Error message for required folder selection -->
+        <div id="error-message" class="error-message"></div>
     </form>
-    </div>
-    
-    
-    
-
-
-
-<div id="file-preview"></div>
-    
-    
-    
-    
-    <br>    <br>    <br>
-    
-<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start;">
-  {% for video in videos %}
-    <div class="card" style="width: 320px;">
-      <video width="320" height="240" controls>
-        <source src="{{ video.video.url }}" type="video/mp4">
-      </video>
-      <div class="card-body" style="padding-bottom: 5px; height: auto; padding-top: 15px; padding-left: 15px; padding-right: 15px;">
-        <h5 class="card-title">Title: {{ video.title }}</h5>
-        <p class="card-text">Video Description: {{ video.description }}</p>
-        <form action="" method="post">
-          {% csrf_token %}
-          <input type="hidden" name="video_id" value="{{ video.id }}">
-          <button type="submit" class="btn btn-sm btn-outline-secondary" name="delete">Delete</button>
-        </form>
-      </div>
-    </div>
-  {% endfor %}
 </div>
-    
+
+<p>{{ error1 }}</p>
+<p>{{ error }}</p>
+
+<!-- Select Folder to view Videos -->
+<h3>Select your Folder to view Videos</h3>
+<form method="POST" name="folderForm">
+    {% csrf_token %}
+    <label for="folder_id"></label>
+    <div class="input-group mb-3">
+        <button class="btn btn-outline-secondary dropdown-toggle btn-dropdown-custom" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Folder
+        </button>
+        <ul class="dropdown-menu">
+            {% for folder in folders %}
+                <li>
+                    <a class="dropdown-item" href="#" onclick="selectFolder({{ folder.id }}, '{{ folder.title }}')">
+                        {{ folder.title }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+        <input type="hidden" name="folder_id" id="folder_id" value="{% if selected_folder %}{{ selected_folder.id }}{% else %}''{% endif %}">
+    </div>
+</form>
+
+
+    <h3>Videos in "{{ selected_folder.title }}" Folder</h3>
+    <div class="video-container">
+        {% for video in videos %}
+            <div class="video-item">
+                <div class="video-container">
+                    <video width="100%" height="225" controls>
+                        <source src="{{ video.video.url }}" type="video/mp4">
+                    </video>
+                </div>
+                <div class="video-title">Video title: {{ video.title }}</div>
+                <div class="video-desc">Video description: {{ video.description }}</div>
+            </div>
+        {% endfor %}
+    </div>
+
+
+<!-- JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const videoInput = document.getElementById('video');
+        const fileName = document.getElementById('file-name');
+
+        videoInput.addEventListener('change', function() {
+            if (videoInput.files.length > 0) {
+                fileName.textContent = videoInput.files[0].name;
+            } else {
+                fileName.textContent = '';
+            }
+        });
+    });
+
+    // Folder selection script
+    function selectFolder(folderId, folderTitle) {
+        document.getElementById('folder_id').value = folderId;
+        var form = document.forms['folderForm'];
+        form.submit(); // Submit form to refresh page with selected folder
+    }
+</script>
+
 {% endblock %}

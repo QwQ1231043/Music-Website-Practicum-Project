@@ -1,25 +1,78 @@
 {% extends 'mainpage_template.html' %}
+
 {% block body1 %}
-<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start;">
-{% for obj in likes_videoes %}
-    <div class="border p-2"> 
-    
-        <video width="420" height="225" controls>
-            <source src="{{ obj.video.video.url }}" type="video/mp4">
-        </video>
-        <div style="display:flex; flex-direction: column-reverse">
-        <p>video title:{{ obj.video.title }}</p>
-        <p>video description:{{ obj.video.description }}</p>
-        <p>uploader:{{ obj.video.user.username }}</p>
+<div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start;">
+    {% for obj in likes_videoes %}
+        <div class="video-card border rounded shadow-sm p-3" style="width: 420px; background-color: #fff;">
+            <!-- Video Section -->
+            <div class="video-container mb-3">
+                <video class="w-100" height="225" controls>
+                    <source src="{{ obj.video.video.url }}" type="video/mp4">
+                </video>
+            </div>
+
+            <!-- Video Information Section -->
+            <div class="video-info" style="display: flex; flex-direction: column; gap: 10px;">
+                <h5 class="video-title" style="font-size: 1.2rem; font-weight: bold; color: #333;">Video title: {{ obj.video.title }}</h5>
+                <p class="video-description" style="font-size: 1rem; color: #555;">Video Description: {{ obj.video.description }}</p>
+                <p class="video-uploader" style="font-size: 0.9rem; color: #777;">Uploaded by: {{ obj.video.user.username }}</p>
+            </div>
+            <br>
+            <!-- Delete Button Form -->
+            <form action="" method="post">
+                <input type="hidden" name="video_id" value="{{ obj.id }}">
+                <button type="submit" class="btn btn-sm btn-outline-danger w-100" name="delete">Delete</button>
+            </form>
         </div>
-        <form action="" method="post">
-        <input type="hidden" name="video_id" value="{{ obj.id }}">
-        <button type="submit" class="btn btn-sm btn-outline-secondary" name="delete">Delete</button>
-        </form>
-    
-    </div>
-{% endfor %}
+    {% endfor %}
 </div>
+
+<style>
+    .video-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .video-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .video-container video {
+        border-radius: 8px;
+        object-fit: contain;
+    }
+
+    .video-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #333;
+        margin: 0;
+    }
+
+    .video-description {
+        font-size: 1rem;
+        color: #555;
+        margin: 0;
+    }
+
+    .video-uploader {
+        font-size: 0.9rem;
+        color: #777;
+        margin: 0;
+    }
+
+    /* Styling for the delete button */
+    .btn-outline-danger {
+        background-color: #fff;
+        border-color: #dc3545;
+        color: #dc3545;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: #fff;
+    }
+</style>
+
 {% endblock %}
-
-

@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.views.decorators.http import require_http_methods
 from mainpage.forms import *
 from user.forms import Video
-from user.models import user_information,management,likes,like,likess,folderss,favorites
+from user.models import user_information, management, likes, like, likess, folderss, favorites, avatars
 from django import forms
 from mainpage.forms import *
 from django.contrib.auth.models import User
@@ -53,6 +53,8 @@ def check_verification(request):
             age = request.session.get('age')
             user = User.objects.create_user(username=username, password=password, email=email)
             user1=  user_information(username=username, password=password, age=age,email=email)
+            avatar = avatars.objects.create(user=user1)
+            avatar.save()
             user.save()
             user1.save()
             return redirect('mainpage:sign_in')

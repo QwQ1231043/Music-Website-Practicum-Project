@@ -2,17 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friend List</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <style>
+        .friend-card {
+            margin-bottom: 30px;
+        }
+        .avatar-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .card-body {
+            padding: 20px;
+        }
+    </style>
 </head>
 <body>
-<p>Here is your friend list</p>
-{% for username,useremail in friend %}
 
-            <ul class="list-group list-group-flush" style="width:500px">
-  <li class="list-group-item">   Username: {{ username }} <br>Useremail: {{useremail }}</li>
-  <li class="list-group-item"></li>
-</ul>
+    <div class="container mt-5">
+        <h2>Here is your friend list:</h2>
 
-{% endfor %}
+        {% for friend in friends %}  <!-- Loop through each friend -->
+            <div class="card mb-4 shadow-lg friend-card">
+                <div class="row no-gutters">
+                    <!-- Avatar -->
+                    <div class="col-md-4 text-center py-3">
+                        <img src="{{ friend.avatar.url }}" class="img-fluid avatar-img" alt="User Avatar">
+                    </div>
+                    <!-- Friend Details -->
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ friend.username }}</h4>
+                            <p class="card-text"><strong>Email:</strong> {{ friend.email }}</p>
+                            <p class="card-text"><strong>Age:</strong> {{ friend.age }}</p>
+                            <p class="card-text"><small class="text-muted">Joined on {{ friend.date_joined }}</small></p>
+                            <!-- Edit Button -->
+                            <a href="#" class="btn btn-primary mt-3">Edit Profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity Section -->
+            <div class="mt-4">
+                <h5>Recent Activity</h5>
+                <div class="row">
+                    {% for video in friend.videos.all %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card shadow-sm">
+                                <img src="{{ video.thumbnail_url }}" class="card-img-top" alt="Video Thumbnail">
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ video.title }}</h6>
+                                    <p class="card-text">{{ video.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,19 +1,122 @@
 {% extends 'mainpage_template.html' %}
+
 {% block body1 %}
-    {% for obj in folders %}
-        <p>{{ obj.title }}</p>
-        {% for objs in obj.video.all %}
-            <video width="100%" height="225" controls>
-                                <source src="{{ objs.video.url }}" type="video/mp4">
-                            </video>
-            <p>{{ objs.title }}</p>
-            {% endfor %}
-    {% endfor %}
-        <h3>Create new folders</h3>
-    <form method="POST">
+
+<script>
+function selectFolder(folderId, folderTitle) {
+    document.getElementById('folder_id').value = folderId;
+    console.log('Selected Folder:', folderTitle);
+    document.forms['folderForm'].submit();
+}
+</script>
+
+<!-- Container for creating new folders -->
+<div class="container py-4">
+    <h3 >Create a New Folder</h3>
+    <form method="POST" class="mb-5">
         {% csrf_token %}
-        <label for="title">Folder title:</label>
-        <input type="text" name="title" required>
-        <button type="submit" name="create_folder">Create Folder</button>
+        <div class="form-group">
+            <label for="title">Folder Title:</label>
+            <input type="text" name="title" class="form-control" style="width:500px"required>
+        </div>
+        <button type="submit" name="create_folder" class="btn btn-primary mt-3">Create Folder</button>
     </form>
+
+    <!-- Folder Selection Section -->
+    <h3 >Select a Folder to View Your Favorite Videos</h3>
+    <form method="POST" name="folderForm" class="mb-5">
+        {% csrf_token %}
+        <div class="input-group">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Select Folder
+            </button>
+            <ul class="dropdown-menu">
+                {% for folder in folders %}
+                    <li>
+                        <a class="dropdown-item" href="#" onclick="selectFolder({{ folder.id }}, '{{ folder.title }}')">
+                            {{ folder.title }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <input type="hidden" name="folder_id" id="folder_id" value="">
+        </div>
+    </form>
+</div>
+
+<!-- Display Videos if Folder is Selected -->
+<div class="container">
+    <h3 >Videos in "{{ selected_folder.title }}" Folder:</h3>
+    <br>
+    <!-- Flexbox layout for videos -->
+    <div class="row" style="display: flex; flex-wrap: wrap; gap: 20px;">
+        {% for video in videos %}
+            <div class="col-12 col-md-6 col-lg-4" style="min-width: 550px; max-width: 550px;">
+                <div class="video-item">
+                    <video class="w-100" height="225" controls>
+                        <source src="{{ video.video.url }}" type="video/mp4">
+                    </video>
+                    <h5>Video title: {{ video.title }}</h5>
+                    <p>Video description: {{ video.description }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    /* Styling for video items */
+    .video-item {
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        background-color: #fff;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+    }
+
+    /* Hover effect */
+    .video-item:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Ensuring the video fills the card without distortion */
+    .video-item video {
+        border-radius: 8px;
+        width: 100%;
+        height: 225px; /* Fixed height for video */
+        object-fit: contain; /* Ensures the video covers the entire area without distortion */
+    }
+
+    .video-item h5 {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-top: 15px;
+        color: #333;
+    }
+
+    .video-item p {
+        font-size: 0.95rem;
+        color: #777;
+        margin-top: 8px;
+    }
+
+    /* Styling for small screens */
+    @media (max-width: 768px) {
+        .video-item {
+            padding: 15px;
+        }
+
+        .video-item h5 {
+            font-size: 1rem;
+        }
+
+        .video-item p {
+            font-size: 0.85rem;
+        }
+    }
+</style>
+
 {% endblock %}

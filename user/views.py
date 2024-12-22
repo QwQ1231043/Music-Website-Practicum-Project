@@ -2,23 +2,30 @@ from django.db.models import manager
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django import forms
-from user.forms import Video
-from user.models import user_information,friends,management,likess,like,folderss
+from user.forms import Video, ManagementFolderForm
+from user.models import user_information, friends, management, likess, like, folderss, management_folders,avatars
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
 def profile(request):
-    username = request.user.username
-    email = request.user.email
-    password = request.user.password
+    user=request.user
+    username = user.username
+    email = user.email
+    password = user.password
+    avatar=avatars.objects.filter(user=user)
+    if not avatar:
+        avatar=avatars.objects.create(user=user)
+        avatar.save()
+    avatar = user.avatars.avatar
     age1= user_information.objects.filter(email=email).values('age')
     age=age1.first()['age']
     context={
         'username':username,
         'email':email,
         'password':password,
-        'age':age
+        'age':age,
+        'avatar':avatar,
     }
     return render(request,'profile.html',context)
 
@@ -35,10 +42,19 @@ def user_flavorite(request):
             new_folder.save()
             return redirect('user:flavorite')
     folders = folderss.objects.filter(user=request.user)
+    folder_id=request.POST.get('folder_id')
+    if folder_id:
+        forlder=folderss.objects.get(user=request.user, id=folder_id)
+        videos=forlder.video.all()
+    else:
+        forlder=folderss.objects.filter(user=request.user).first()
+        videos=forlder.video.all()
     context={
         'folders':folders,
+        'selected_folder':forlder,
+        'videos':videos,
     }
-    return render(request,'flavorite.html',context)
+    return render(request, 'flavorite.html', context)
 
 
 def user_likes(request):
@@ -58,57 +74,72 @@ def user_likes(request):
 def user_management(request):
     if request.method=='POST':
         form=Video(request.POST,request.FILES)
-        print(form)
-        if form.is_valid():
+        folder=ManagementFolderForm(request.POST)
+        if form.is_valid() and folder.is_valid():
             title=form.cleaned_data['title']
             description=form.cleaned_data['description']
             video=form.cleaned_data['video']
             user=request.user
             object=management(title=title,description=description,video=video,user=user)
             object.save()
-            print("save successfully done")
-            return render(request,'management.html',context={'object':object})
+            folder_id=request.POST.get('folder_id')
+            if folder_id:
+                try:
+                    folder = management_folders.objects.get(id=folder_id, user=request.user)
+                    folder.videos.add(object)
+                except management_folders.DoesNotExist:
+                    error_message = "Folder not found or does not belong to the current user."
+                    return render(request, 'management.html', {'error1': error_message})
+            else:
+                new_folder_title=request.POST.get('new_folder_title')
+                if folder_id == "" and not new_folder_title:
+                    error_message = "You must either select a folder or create a new folder."
+                    return render(request, 'management.html', {'error1': error_message})
+                if management_folders.objects.filter(user=request.user,title=new_folder_title):
+                    error="The folder is already exist"
+                    return render(request,'management.html',context={'error':error})
+                if new_folder_title:
+                    new_folder=management_folders.objects.create(user=request.user,title=new_folder_title)
+                    new_folder.videos.add(object)
+                    new_folder.save()
+
+            return redirect('user:management')
         if 'delete' in request.POST:
             video_id=request.POST.get('video_id')
             video=management.objects.filter(id=video_id)
             video.delete()
             return redirect('user:management')
-    videos=management.objects.filter(user=request.user)
-    print('gg')
-    return render(request,'management.html',context={'videos':videos})
+    forlder_id1=request.POST.get('folder_id')
+    if forlder_id1:
+        selected_forlder=management_folders.objects.filter(user=request.user,id=forlder_id1).first()
+        videos=selected_forlder.videos.all()
+    else:
+        selected_forlder=management_folders.objects.filter(user=request.user).first()
+        videos=selected_forlder.videos.all()
+    folders=management_folders.objects.filter(user=request.user)
+    return render(request,'management.html',context={'videos':videos,'folders':folders,'selected_folder':selected_forlder})
 
 
 def user_friends(request):
-    friendss=friends.objects.filter(user=request.user)
-    username=[friend.friends.username for friend in friendss]
-    useremail=[friend.friends.email for friend in friendss]
-    friend=zip(username,useremail)
-    print(username)
-    print(useremail)
-    if request.method=='POST':
-        email=request.POST['email']
+    friendss = friends.objects.filter(user=request.user)
+    friends_data = [friend.friends for friend in friendss]
+
+    if request.method == 'POST':
+        email = request.POST['email']
         if User.objects.filter(email=email).exists():
-            target=User.objects.get(email=email)
-            print(target.username)
-            context={'target':target}
+            target = User.objects.get(email=email)
+            context = {'target': target}
             if 'add' in request.POST:
                 print("add")
-                judgement=True
-                if not friends.objects.filter(user=request.user,friends=target).exists():
-                    friends.objects.create(user=request.user,friends=target)
-                    judgement=False
+                if not friends.objects.filter(user=request.user, friends=target).exists():
+                    friends.objects.create(user=request.user, friends=target)
                     return redirect('user:friends')
                 else:
-                    context={
-                        'target':target,
-                        'error2':"You already add this person as your friend"
-                    }
-                    return render(request,'friends.html',context)
-            return render(request,'friends.html',context)
-        error= True;
-        print(error)
-        return  render(request,'friends.html',context={'error':error})
-    return render(request,'friends.html',context={'friend':friend})
+                    context['error2'] = "You already added this person as your friend"
+                    return render(request, 'friends.html', context)
+            return render(request, 'friends.html', context)
 
+        context = {'error': True}
+        return render(request, 'friends.html', context)
 
-
+    return render(request, 'friends.html', context={'friends': friends_data})

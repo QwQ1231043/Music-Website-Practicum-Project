@@ -1,10 +1,45 @@
 {% extends 'mainpage_template.html' %}
 
 {% block body1 %}
-    <p>
-    Nice to meet you {{ username }}
-    </p>
-    {{ email }}
-    {{ age }}
-{% endblock %}
+    <div class="container mt-5">
+        <!-- User Info Card -->
+        <div class="card mb-3 shadow-lg">
+            <div class="row no-gutters">
+                <!-- Avatar -->
+                <div class="col-md-4 text-center py-3">
+                    <img src="{{ avatar.url }}" class="img-fluid rounded-circle" alt="User Avatar" style="width: 150px; height: 150px; object-fit: cover;">
+                </div>
+                <!-- User Details -->
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ user.username }}</h4>
+                        <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
+                        <p class="card-text"><strong>Age:</strong> {{ age }}</p>
+                        <p class="card-text"><small class="text-muted">Joined on {{ user.date_joined }}</small></p>
+                        <!-- Edit Button -->
+                        <a href="" class="btn btn-primary mt-3">Edit Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <!-- Recent Activity Section -->
+        <div class="mt-4">
+            <h5>Recent Activity</h5>
+            <div class="row">
+                {% for video in user.videos.all %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-sm">
+                            <img src="{{ video.thumbnail_url }}" class="card-img-top" alt="Video Thumbnail">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ video.title }}</h6>
+                                <p class="card-text">{{ video.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

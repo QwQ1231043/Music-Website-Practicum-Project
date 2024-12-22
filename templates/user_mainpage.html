@@ -1,76 +1,188 @@
 {% extends 'mainpage_template.html' %}
+
 {% block body1 %}
-       <p>Welcome {{ user.username }}</p>
-    
+<p>Welcome {{ user.username }}</p>
+
 <script>
     function submitFavoriteForm(folderId, videoId) {
-
         document.getElementById('video_id').value = videoId;
         document.getElementById('folder_id').value = folderId;
-
-
         document.getElementById('submit-favorite-form').click();
     }
 </script>
-<style>
-.d-flex button {
-    height: 35px; 
-}
-    </style>
-<div class="container">
-    <div class="row" style="display: flex; flex-wrap: wrap; gap: 10px;">
-        {% for obj in videos %}
-        <div class="col-auto" style="width: 670px;">
-            <div class="card shadow-sm" style="width: 100%;">  
 
-                <div class="card-img-top" style="position: relative; overflow: hidden;">
+<style>
+    .d-flex button {
+        height: 35px;
+    }
+
+    /* General card style */
+    .card {
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        width: 100%; /* Ensure card fills its container */
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Styling for the video */
+    .card-img-top video {
+        border-radius: 12px;
+        width: 100%;
+        height: 225px;
+        object-fit: contain;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .card-text {
+        font-size: 1rem;
+        color: #555;
+    }
+
+    .dropdown-menu {
+        min-width: 200px;
+    }
+
+    .btn-group .btn {
+        font-size: 0.875rem;
+    }
+
+    .btn-outline-secondary {
+        border-color: #6c757d;
+        color: #6c757d;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        color: #fff;
+    }
+
+    .btn-secondary {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+    .dropdown-toggle {
+        font-size: 0.875rem;
+        color: #fff;
+    }
+
+    .text-body-secondary {
+        font-size: 0.9rem;
+        color: #777;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .card {
+            width: 100%;
+        }
+
+        .btn-group {
+            flex-direction: column;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+    }
+
+    /* Custom width for cards */
+    .video-card {
+        width: 600px; /* Set your desired width here */
+        margin: 10px; /* Add space between cards */
+    }
+
+    /* Adjust buttons inside .btn-group to be closer */
+    .btn-group {
+        display: flex;
+        gap: 10px; /* Decrease gap between buttons */
+    }
+
+    /* Optional: Adjust the spacing between buttons */
+    .btn-group .btn {
+        margin: 0;
+    }
+
+</style>
+
+<div class="container">
+    <div class="row" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start;">
+        {% for obj in videos %}
+        <div class="col-12 col-md-6 col-lg-4 video-card">
+            <div class="card">
+                <!-- Video Section -->
+                <div class="card-img-top">
                     <video width="100%" height="225" controls>
                         <source src="{{ obj.video.url }}" type="video/mp4">
                     </video>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title"> Title: {{ obj.title }}</h5>
+                    <h5 class="card-title">Title: {{ obj.title }}</h5>
                     <p class="card-text">Description: {{ obj.description }}</p>
                 </div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                            <div class="d-flex gap-3">
-                                <div class="d-flex gap-3">
+                            <!-- Like Button -->
                             <form action="" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="video_id" value="{{ obj.id }}">
                                 <button type="submit" class="btn btn-sm btn-outline-secondary" name="like">Like</button>
                             </form>
-                        </div>
-                        <form action="" method="post">
-                            {% csrf_token %}
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Add to favorites
-                                </button>
-                                <div class="dropdown-menu">
-                                    {% for folder in folders %}
-                                 <a class="dropdown-item" href="#" onclick="submitFavoriteForm('{{ folder.id }}', '{{ obj.id }}')">
-                                 {{ folder.title }}
-                                </a>
-                                    {% empty %}
-                                    <a class="dropdown-item" href="#">No folders available</a>
-                                    {% endfor %}
+
+                            <!-- Add to Favorites Dropdown -->
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Add to favorites
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        {% for folder in folders %}
+                                            <a class="dropdown-item" href="#" onclick="submitFavoriteForm('{{ folder.id }}', '{{ obj.id }}')">
+                                                {{ folder.title }}
+                                            </a>
+                                        {% empty %}
+                                            <a class="dropdown-item" href="#">No folders available</a>
+                                        {% endfor %}
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
                         </div>
-                        </div>
+
+                        <!-- Favorite Form (hidden) -->
                         <form id="favorite-form" action="" method="post" style="display: none;">
-    {% csrf_token %}
-    <input type="hidden" name="video_id" id="video_id">
-    <input type="hidden" name="folder_id" id="folder_id">
-    <button type="submit" id="submit-favorite-form" name="favorite" style="display: none;"></button> <!-- Hidden button -->
-</form>
-                        <div class="btn-group">
-                            <small class="text-body-secondary">Published by {{ obj.upload_time }}<br> Published by: {{ obj.user.username }}</small>
-                        </div>
+                            {% csrf_token %}
+                            <input type="hidden" name="video_id" id="video_id">
+                            <input type="hidden" name="folder_id" id="folder_id">
+                            <button type="submit" id="submit-favorite-form" name="favorite" style="display: none;"></button> <!-- Hidden button -->
+                        </form>
+
+                        <!-- Video Info -->
+                        <small class="text-body-secondary">Published on {{ obj.upload_time }}<br> By: {{ obj.user.username }}</small>
                     </div>
                 </div>
             </div>
@@ -78,7 +190,9 @@
         {% endfor %}
     </div>
 </div>
+
 {% endblock %}
+
 {% block body3 %}
     <p>username</p>
 {% endblock %}
