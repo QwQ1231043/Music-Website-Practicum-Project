@@ -15,24 +15,26 @@ from django.core.mail import send_mail
 # Create your views here.
 @require_http_methods(['GET','POST'])
 def mainpage_template(request):
+    user = request.user
+    avatar=user.avatars.avatar
     videos = management.objects.all().order_by('?')[:10]
-    return render(request, "default_mainpage.html", {'videos':videos})
+    return render(request, "default_mainpage.html", {'videos':videos,'user':user,'avatar':avatar})
 
 
 def sign_in(request):
-
     if request.method == "POST":
         email = request.POST.get('email')
         password = request.POST.get('password')
         user = authenticate(request, email=email, password=password)
-        print(user)
         if user is not None:
             login(request, user)  # Create session and mark user as authenticated
-            return render(request,'user_mainpage.html')
+            user=request.user
+            avatar=user.avatars.avatar
+            return render(request,'user_mainpage.html',{'avatar':avatar,'user':user})
         else:
             print("error")
             return render(request, 'login.html', {'error': 'Invalid credentials, please check your account and password'})
-    return render(request, "login.html", )
+    return render(request, "login.html")
 
 def send_verification(request,email1):
     verification_code = "".join(random.sample(string.digits, 6))

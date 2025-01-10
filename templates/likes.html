@@ -1,40 +1,45 @@
 {% extends 'mainpage_template.html' %}
 
 {% block body1 %}
+    
+<div class="page-header" style="display: flex; flex-direction: column;  text-align: left; margin-bottom: 50px;">
+    <h2 style="font-size: 2.5rem; font-weight: 700; color: #333; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Welcome to the Like Page😎</h2>
+
+</div>
+
 <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start;">
     {% for obj in likes_videoes %}
-        <div class="video-card border rounded shadow-sm p-3" style="width: 420px; background-color: #fff;">
+        <div class="video-card border rounded shadow-sm p-4" style="width: 420px; background-color: #fff; transition: transform 0.3s ease, box-shadow 0.3s ease;">
             <!-- Video Section -->
-            <div class="video-container mb-3">
+            <div class="video-container mb-3" style="border-radius: 8px; overflow: hidden;">
                 <video class="w-100" height="225" controls>
                     <source src="{{ obj.video.video.url }}" type="video/mp4">
                 </video>
             </div>
 
             <!-- Video Information Section -->
-            <div class="video-info" style="display: flex; flex-direction: column; gap: 10px;">
-                <h5 class="video-title" style="font-size: 1.2rem; font-weight: bold; color: #333;">Video title: {{ obj.video.title }}</h5>
-                <p class="video-description" style="font-size: 1rem; color: #555;">Video Description: {{ obj.video.description }}</p>
-                <p class="video-uploader" style="font-size: 0.9rem; color: #777;">Uploaded by: {{ obj.video.user.username }}</p>
+            <div class="video-info" style="display: flex; flex-direction: column; gap: 12px;">
+                <h5 class="video-title" style="font-size: 1.4rem; font-weight: 600; color: #333; margin-bottom: 8px; letter-spacing: 0.5px;">{{ obj.video.title }} 🎬</h5>
+                <p class="video-description" style="font-size: 1rem; color: #555; line-height: 1.6;">{{ obj.video.description }}</p>
+                <p class="video-uploader" style="font-size: 0.9rem; color: #777; margin-top: 5px; font-style: italic;">Uploaded by: {{ obj.video.user.username }} 👤</p>
             </div>
+            
             <br>
+
             <!-- Delete Button Form -->
             <form action="" method="post">
                 <input type="hidden" name="video_id" value="{{ obj.id }}">
-                <button type="submit" class="btn btn-sm btn-outline-danger w-100" name="delete">Delete</button>
+                <button type="submit" class="btn btn-sm btn-outline-danger w-100" name="delete">Delete 🗑️</button>
             </form>
         </div>
     {% endfor %}
 </div>
 
 <style>
-    .video-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
+    /* Video card hover effect */
     .video-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
     }
 
     .video-container video {
@@ -43,25 +48,26 @@
     }
 
     .video-title {
-        font-size: 1.2rem;
-        font-weight: bold;
+        font-size: 1.4rem;
+        font-weight: 600;
         color: #333;
         margin: 0;
+        letter-spacing: 0.5px;
     }
 
     .video-description {
         font-size: 1rem;
         color: #555;
-        margin: 0;
+        line-height: 1.6;
     }
 
     .video-uploader {
         font-size: 0.9rem;
         color: #777;
         margin: 0;
+        font-style: italic;
     }
 
-    /* Styling for the delete button */
     .btn-outline-danger {
         background-color: #fff;
         border-color: #dc3545;
@@ -72,6 +78,24 @@
     .btn-outline-danger:hover {
         background-color: #dc3545;
         color: #fff;
+    }
+
+    /* Styling for the page header */
+    .page-header h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #333;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+        letter-spacing: 1px;
+    }
+
+    .page-header p {
+        font-size: 1.2rem;
+        color: #555;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
     }
 </style>
 

@@ -3,6 +3,7 @@
 {% block body1 %}
 
 <style>
+    /* Drop Container Styling */
     .drop-container {
         position: relative;
         width: 100%;
@@ -52,20 +53,21 @@
     .error-message {
         color: red;
     }
-    
+
+    /* Video Item Styling */
     .video-item {
         background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 123, 255, 0.1);
         overflow: hidden;
-        margin-right: 20px; /* Space between videos */
+        margin-right: 20px;
         width: 450px; /* Fixed width for video items */
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .video-item:hover {
         transform: translateY(-10px);
-        box-shadow: 0 6px 15px rgba(0, 123, 255, 0.2);
+        box-shadow: 0 8px 20px rgba(0, 123, 255, 0.2);
     }
 
     .video-item img {
@@ -80,22 +82,72 @@
         padding: 15px;
         background-color: #007bff;
         color: #fff;
+        text-align: center;
     }
 
     .video-item .video-desc {
         padding: 10px 15px;
         font-size: 0.9rem;
-        color: #333;
+        color: #555;
+        height: 100px; /* Ensures description text is contained */
+        overflow: hidden;
     }
 
-
-    .video-item .video-container {
-        position: relative;
+    .video-item .video-actions {
+        text-align: center;
+        padding: 10px;
+        background-color: #f8f9fa;
     }
 
+    .video-item .video-actions .btn {
+        font-size: 0.9rem;
+        font-weight: 500;
+        padding: 5px 15px;
+        border-radius: 8px;
+    }
+
+    .video-item .video-actions .btn-watch {
+        background-color: #007bff;
+        color: #fff;
+        transition: background-color 0.3s ease;
+    }
+
+    .video-item .video-actions .btn-watch:hover {
+        background-color: #0056b3;
+    }
+
+    .video-item .video-actions .btn-details {
+        background-color: #f1f3f5;
+        color: #007bff;
+        transition: background-color 0.3s ease;
+    }
+
+    .video-item .video-actions .btn-details:hover {
+        background-color: #e2e6ea;
+    }
+
+    /* Flexbox container for videos */
+    .video-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: flex-start;
+        margin-top: 20px;
+    }
+
+    /* Dropdown and Button Styling */
     .btn-dropdown-custom {
         border-radius: 5px;
         font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
+
+    .dropdown-toggle {
+        background-color: white;
+        color: #0D6EFD;
+        border-radius: 5px;
+        font-weight: 500;
+        padding: 10px 15px;
     }
 
     .dropdown-menu {
@@ -103,29 +155,43 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
-    /* Flexbox container for videos */
-    .video-container {
-        display: flex;
-        flex-wrap: wrap;  /* Allows the videos to move to the next row if space is not enough */
-        gap: 20px;
-        justify-content: flex-start;
-        margin-top: 20px;
+    .dropdown-toggle:hover {
+        background-color: #f8f9fa;
     }
 
-    .dropdown-toggle {
-        background-color: WHITE;
-        color: #0D6EFD;
+    .btn-primary {
+        background-color: #007bff;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    /* Styling for Folder Selection */
+    .input-group {
         border-radius: 5px;
         font-weight: 500;
     }
 
-    .dropdown-menu {
-        border-radius: 5px;
-        padding: 0;
+    .form-control, .form-select {
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .form-label {
+        font-weight: 600;
+    }
+
+    .input-group-text {
+        font-size: 1rem;
     }
 </style>
 
-<!-- HTML 内容 -->
+<!-- HTML Content -->
 <div style="max-width: 500px">
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
@@ -169,10 +235,10 @@
 
                 <!-- Create New Folder Input -->
                 <div id="new-folder-container" class="mb-3">
-                    <label for="new_folder_title" class="form-label">Create a new folder (make sure you choose skip selecting folder):</label>
+                    <label for="new_folder_title" class="form-label" style="width:400px">Create a new folder (make sure you choose skip selecting folder):</label>
                     <input type="text" class="form-control" id="new_folder_title" name="new_folder_title" placeholder="Enter new folder name">
                 </div>
-                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                <button type="submit" class="btn btn-primary mt-3 w-100">Submit</button>
             </div>
         </div>
 
@@ -196,7 +262,7 @@
         <ul class="dropdown-menu">
             {% for folder in folders %}
                 <li>
-                    <a class="dropdown-item" href="#" style='' onclick="selectFolder({{ folder.id }}, '{{ folder.title }}')">
+                    <a class="dropdown-item" href="#" onclick="selectFolder({{ folder.id }}, '{{ folder.title }}')">
                         {{ folder.title }}
                     </a>
                 </li>
@@ -206,22 +272,24 @@
     </div>
 </form>
 
-
-    <h3>Videos in "{{ selected_folder.title }}" Folder</h3>
-    <div class="video-container">
-        {% for video in videos %}
-            <div class="video-item">
-                <div class="video-container">
-                    <video width="100%" height="225" controls>
-                        <source src="{{ video.video.url }}" type="video/mp4">
-                    </video>
-                </div>
-                <div class="video-title">Video title: {{ video.title }}</div>
-                <div class="video-desc">Video description: {{ video.description }}</div>
+<h3>Videos in "{{ selected_folder.title }}" Folder</h3>
+<div class="video-container">
+    {% for video in videos %}
+        <div class="video-item">
+            <div class="video-container">
+                <video width="100%" height="225" controls>
+                    <source src="{{ video.video.url }}" type="video/mp4">
+                </video>
             </div>
-        {% endfor %}
-    </div>
-
+            <div class="video-title">Video title: {{ video.title }}</div>
+            <div class="video-desc">Video description: {{ video.description }}</div>
+            <div class="video-actions">
+                <button class="btn btn-watch">Watch</button>
+                <button class="btn btn-details">Details</button>
+            </div>
+        </div>
+    {% endfor %}
+</div>
 
 <!-- JavaScript -->
 <script>

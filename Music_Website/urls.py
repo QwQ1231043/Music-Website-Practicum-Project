@@ -20,10 +20,13 @@ from django.shortcuts import render,HttpResponse
 from mainpage.views import mainpage_template
 from django.conf import settings
 from django.conf.urls.static import static
-
+from user.models import *
 
 def default_page(request):
-    return render(request,'mainpage_template.html')
+    user = request.user
+    if user is not None:
+        avatar=user.avatars.avatar
+    return render(request,'mainpage_template.html',{'avatar':avatar,'user':user})
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('mainpage/',include('mainpage.urls')),

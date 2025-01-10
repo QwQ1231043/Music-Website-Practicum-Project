@@ -1,7 +1,7 @@
 import os
 
 from django.db.models import manager
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.models import User
 from django import forms
 from user.forms import Video, ManagementFolderForm, EditProfileForm, changed_data
@@ -235,3 +235,15 @@ def edit_profile(request):
         })
     avatar=user.avatars.avatar
     return render(request, 'edit_profile.html', {'form': form, 'avatar': avatar})
+
+def delete_folder(request,folder_id):
+    folder=folderss.objects.get(id=folder_id)
+    folder.delete()
+    return redirect('user:flavorite')
+
+def delete_video_from_folder(request, folder_id, video_id):
+    user = request.user
+    folder = get_object_or_404(folderss, id=folder_id, user=user)
+    video = get_object_or_404(management, id=video_id, user=user)
+    folder.video.remove(video)
+    return redirect('user:flavorite')
