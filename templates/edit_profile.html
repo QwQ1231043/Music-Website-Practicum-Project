@@ -1,0 +1,79 @@
+{% extends 'mainpage_template.html' %}
+
+{% block body1 %}
+<div class="container mt-5">
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+
+        <!-- Left Section: Profile Edit Form (40%) -->
+        <div style="flex: 40%; display: flex; flex-direction: column; padding: 30px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);">
+            <h3 class="text-primary mb-4 text-center" style="font-size: 1.8rem; font-weight: 600; color: #333;">Edit Profile</h3>
+
+            <!-- Display Form Errors (if any) -->
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <!-- Edit Form -->
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Avatar (optional if the user can change it) -->
+                <div class="mb-4 text-center">
+                    <!-- Display current avatar if exists -->
+                    {% if avatar %}
+                        <div class="mb-3">
+                            <img src="{{ avatar.url }}" alt="Current Avatar" class="img-fluid rounded-circle shadow-sm" style="width: 180px; height: 180px; object-fit: cover;">
+                        </div>
+                    {% endif %}
+                    <label for="avatar" class="form-label" style="font-size: 1.1rem; font-weight: 500; color: #555;">Change Avatar</label>
+                    <!-- Avatar upload input -->
+                    <input type="file" name="avatar" id="avatar" class="form-control" style="border-radius: 8px; padding: 12px 15px; font-size: 1rem; border: 1px solid #ddd;">
+                </div>
+
+                <!-- Username -->
+                <div class="form-group mb-4">
+                    <label for="username" class="form-label" style="font-size: 1.1rem; font-weight: 500; color: #555;">Username</label>
+                    <input type="text" name="username" class="form-control" id="username" value="{{ form.username.value }}" style="border-radius: 8px; padding: 12px 15px;">
+                </div>
+
+                <!-- Bio -->
+                <div class="form-group mb-4">
+                    <label for="bio" class="form-label" style="font-size: 1.1rem; font-weight: 500; color: #555;">Bio</label>
+                    <textarea name="introduction" id="introduction" class="form-control" rows="4" style="border-radius: 8px; padding: 12px 15px;">{{ form.introduction.value }}</textarea>
+                </div>
+
+                <!-- Age -->
+                <div class="form-group mb-4">
+                    <label for="age" class="form-label" style="font-size: 1.1rem; font-weight: 500; color: #555;">Age</label>
+                    <input type="number" name="age" class="form-control" id="age" value="{{ form.age.value }}" style="border-radius: 8px; padding: 12px 15px;">
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg" style="border-radius: 25px; padding: 12px 35px; font-weight: 600;">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Dividing Line -->
+        <div style="border-left: 1px solid #ddd; margin: 0 20px;"></div>
+
+        <!-- Right Section: Additional Information (60%) -->
+        <div style="flex: 60%; display: flex; flex-direction: column; padding: 30px; background-color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);">
+            <h3 class="text-primary mb-4" style="font-size: 1.8rem; font-weight: 600; color: #333;">Additional Information</h3>
+            <p style="font-size: 1.15rem; color: #555;">This section can be used for displaying user activity, preferences, or settings. You can add relevant data here.</p>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

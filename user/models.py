@@ -6,7 +6,7 @@ from django.utils import timezone
 class user_information(models.Model):
     username = models.CharField(max_length=120)
     password = models.CharField(max_length=120)
-    email = models.CharField(max_length=120,unique=True)
+    email = models.EmailField(unique=True)
     age = models.IntegerField(default=0)
 
 class friends(models.Model):
@@ -59,3 +59,8 @@ class avatars(models.Model):
     avatar=models.ImageField(upload_to="avatars/",default='avatars/default.jpg')
     def __str__(self):
         return self.user.username
+
+class userprofile(models.Model):
+    user=models.OneToOneField(User,on_delete=models.CASCADE)
+    age=models.IntegerField(default=0)
+    introduction=models.CharField(max_length=500,default='This user is too lazy to leave anything behind.')

@@ -2,44 +2,76 @@
 
 {% block body1 %}
     <div class="container mt-5">
-        <!-- User Info Card -->
-        <div class="card mb-3 shadow-lg">
-            <div class="row no-gutters">
-                <!-- Avatar -->
-                <div class="col-md-4 text-center py-3">
-                    <img src="{{ avatar.url }}" class="img-fluid rounded-circle" alt="User Avatar" style="width: 150px; height: 150px; object-fit: cover;">
-                </div>
-                <!-- User Details -->
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h4 class="card-title">{{ user.username }}</h4>
-                        <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
-                        <p class="card-text"><strong>Age:</strong> {{ age }}</p>
-                        <p class="card-text"><small class="text-muted">Joined on {{ user.date_joined }}</small></p>
-                        <!-- Edit Button -->
-                        <a href="" class="btn btn-primary mt-3">Edit Profile</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div style="display: flex; flex-direction: row; justify-content: space-between;">
 
-        <!-- Recent Activity Section -->
-        <div class="mt-4">
-            <h5>Recent Activity</h5>
-            <div class="row">
-                {% for video in user.videos.all %}
-                    <div class="col-md-4 mb-4">
-                        <div class="card shadow-sm">
-                            <img src="{{ video.thumbnail_url }}" class="card-img-top" alt="Video Thumbnail">
-                            <div class="card-body">
-                                <h6 class="card-title">{{ video.title }}</h6>
-                                <p class="card-text">{{ video.description }}</p>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
+            <!-- Left Section: User Information (40%) -->
+            <div style="flex: 40%; display: flex; flex-direction: column; padding: 30px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);">
+                <h3 class="text-primary mb-4 text-center" style="font-size: 1.6rem; font-weight: 600; color: #333;">User Profile</h3>
+
+                <!-- Avatar -->
+                <div class="mb-4 text-center">
+                    <img src="{{ avatar.url }}" class="img-fluid rounded-circle shadow-sm" alt="User Avatar" style="width: 180px; height: 180px; object-fit: cover;">
+                </div>
+
+                <!-- User Info -->
+                <div class="mb-3">
+                    <strong style="font-size: 1.1rem; color: #444;">Username:</strong>
+                    <p style="font-size: 1.15rem; color: #555;">{{ user.username }}</p>
+                </div>
+                <div class="mb-3">
+                    <strong style="font-size: 1.1rem; color: #444;">Email:</strong>
+                    <p style="font-size: 1.15rem; color: #555;">{{ user.email }}</p>
+                </div>
+                <div class="mb-3">
+                    <strong style="font-size: 1.1rem; color: #444;">Age:</strong>
+                    <p style="font-size: 1.15rem; color: #555;">{{ age }}</p>
+                </div>
+                <div class="mb-3">
+                    <strong style="font-size: 1.1rem; color: #444;">Joined on:</strong>
+                    <p style="font-size: 1.15rem; color: #555;">{{ user.date_joined }}</p>
+                </div>
+
+                <!-- Bio Section -->
+                <div class="mt-4">
+                    <h5 style="font-size: 1.2rem; font-weight: 600; color: #444;">Bio：</h5>
+                    <p style="font-size: 1rem; color: #666;">{{ introduction.introduction }}</p>
+                </div>
+
+                <!-- Edit Profile Button -->
+                <div class="mt-4 text-center">
+                    <a href="{% url 'user:edit_profile' %}" class="btn btn-primary btn-lg" style="border-radius: 25px; padding: 10px 30px; font-weight: 500;">Edit Profile</a>
+                </div>
             </div>
+
+            <!-- Dividing Line -->
+            <div style="border-left: 1px solid #ddd; margin: 0 20px;"></div>
+
+            <!-- Right Section: Additional Information (60%) -->
+            <div style="flex: 60%; display: flex; flex-direction: column; padding: 30px; background-color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);">
+                <h3 class="text-primary mb-4" style="font-size: 1.6rem; font-weight: 600; color: #333;">Additional Information</h3>
+                <p style="font-size: 1.15rem; color: #555;">This section can be used for displaying user activity, preferences, or settings. You can add relevant data here.</p>
+            </div>
+
         </div>
     </div>
 
+    <style>
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                display: block;
+            }
+
+            .container div {
+                flex: 100%;
+                margin-bottom: 20px;
+            }
+
+            /* Remove dividing line on smaller screens */
+            .container div + div {
+                border-left: none;
+                margin-left: 0;
+            }
+        }
+    </style>
 {% endblock %}

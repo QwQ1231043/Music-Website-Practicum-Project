@@ -11,4 +11,5 @@ urlpatterns=[
     path('Management',views.Management,name='Management'),
     path('user_mainpage',views.user_mainpage,name='user_mainpage'),
     path('check_verification',views.check_verification,name='check_verification'),
+    path('mainpage_template',views.mainpage_template,name='mainpage_template'),
 ]

@@ -44,8 +44,6 @@ def check_verification(request):
     if request.method == "POST":
         entered_code=request.POST.get('verification_code')
         stored_code=request.session.get('verification_code')
-        print(entered_code)
-        print(stored_code)
         if entered_code == stored_code:
             username = request.session.get('username')
             password = request.session.get('password')
@@ -53,13 +51,13 @@ def check_verification(request):
             age = request.session.get('age')
             user = User.objects.create_user(username=username, password=password, email=email)
             user1=  user_information(username=username, password=password, age=age,email=email)
-            avatar = avatars.objects.create(user=user1)
+            avatar = avatars.objects.create(user=user)
             avatar.save()
             user.save()
             user1.save()
             return redirect('mainpage:sign_in')
         else:
-            error_message="Invalid verification code,please try again"
+            error_message="Invalid verification code, please try again"
             return render(request, "send_verification.html", {'error_message': error_message})
     return render(request,'send_verification.html')
 
@@ -67,7 +65,6 @@ def sign_up(request):
     if request.method == "POST":
         form = MessageForm(request.POST)
         if form.is_valid():
-            print(type(form.cleaned_data))
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             email = form.cleaned_data['email']
@@ -76,15 +73,12 @@ def sign_up(request):
                 error_message="This username is already taken"
                 error_message1=True
                 return render(request, "sign_up.html", {'form': form, 'error_message': error_message,'error_message1': error_message1})
-            object= user_information(username=username, password=password, email=email, age=age)
-            object.save()
             send_verification(request,email)
             request.session['username']=username
             request.session['email']=email
             request.session['age']=age
             request.session['password']=password
             return redirect('mainpage:check_verification')
-        print(form.errors)
         return render(request, "sign_up.html",{'form':form})
     return render(request, "sign_up.html")
 
@@ -100,8 +94,8 @@ def Management(request):
 def user_mainpage(request):
     videos=management.objects.all().order_by('?')[:10]
     folders=folderss.objects.filter(user=request.user)
-
     user=request.user
+    avatar=user.avatars.avatar
     if request.method == "POST":
         if 'like' in request.POST:
             video_id=request.POST.get('video_id')
@@ -115,9 +109,6 @@ def user_mainpage(request):
             folder = folderss.objects.get(id=folder_id, user=user)
             folder.video.add(video)
             folder.save()
-            print(folder)
-            print('fuck')
             return redirect('mainpage:user_mainpage')
-    print('pass')
-    context = {'user':user,'videos':videos,'folders':folders}
+    context = {'user':user,'videos':videos,'folders':folders,'avatar':avatar}
     return render(request, "user_mainpage.html", context)

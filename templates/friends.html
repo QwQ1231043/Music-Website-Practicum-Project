@@ -1,58 +1,106 @@
 {% extends 'mainpage_template.html' %}
+
 {% block body1 %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
     <style>
-  .list-group-item {
-    border-bottom: 2px solid #ccc; 
-    margin-bottom: 10px; 
-  }
-</style>
-    
-    {% if target %}
-    <form action="" method="post">
-    <p>Search users to add them as your friends </p>
-    <input class="form-control me-2" type="search" 
-           placeholder="Search" aria-label="Search" name="email">
-        <div></div>
+        .list-group-item {
+            border-bottom: 2px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        .search-container {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            width: 480px; /* Fixed width for the entire search container */
+            height: auto; /* Height should adjust based on the content */
+            min-height: 250px; /* Ensure it has a minimum height to prevent shrinking */
+            box-sizing: border-box; /* Ensures padding is included in the total height */
+        }
+
+        .search-container p {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 40px; /* Fixed height for the search input */
+            margin-bottom: 20px;
+            max-width: 400px; /* Maximum width of the input box */
+        }
+
+        .btn-custom {
+            width: 100%;
+            max-width: 200px;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 1rem;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .friend-list-container {
+            margin-top: 30px;
+        }
+    </style>
+
+    <!-- Search Container -->
+    <div class="search-container">
+        {% if target %}
+            <form action="" method="post">
+                <p>Search user emails to add them as your friends:</p>
+                <input class="form-control search-input" type="search" placeholder="Search by email" aria-label="Search" name="email">
+                <div class="form-actions">
+                    <button class="btn btn-outline-success btn-custom" type="submit">Search</button>
+                </div>
+                <br>
+                <p>The target user you want to find is {{ target }}, do you want to add them?</p>
+            </form>
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="email" value="{{ target.email }}">
+                <div class="form-actions">
+                    <button class="btn btn-outline-primary btn-custom" type="submit" name="add" value="add">Add Friend</button>
+                </div>
+            </form>
             <br>
-    <button class="btn btn-outline-success" type="submit">
-        Search</button>
-        <br> <br>
-        <p>The target user you want to find is {{ target }}, do you want to add him?</p>
-    </form>
-        <form action="" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="email" value="{{ target.email }}">
-            <button class="btn btn-outline-success" type="submit" name="add" value="add">add</button>
-        </form>
-        <br>
-        {{ error2 }}
-        
+            <div class="error-message">{{ error2 }}</div>
+
         {% elif error %}
             <form action="" method="post">
-    <p>Search users to add them as your friends </p>
-    <input class="form-control me-2" type="search" 
-           placeholder="Search" aria-label="Search" name="email">
-                    <br>
-    <button class="btn btn-outline-success" type="submit">
-        Search</button>
+                <p>Search user emails to add them as your friends:</p>
+                <input class="form-control search-input" type="search" placeholder="Search by email" aria-label="Search" name="email">
+                <div class="form-actions">
+                    <button class="btn btn-outline-success btn-custom" type="submit">Search</button>
+                </div>
                 <br>
-                <p>Sorry, the user you input does not exist, please try again?</p>
-    </form>
-        
-        
+                <p class="error-message">Sorry, the user you entered does not exist. Please try again.</p>
+            </form>
+
         {% else %}
-               <form action="" method="post">
-       <p>Search users to add them as your friends </p>
-    <input class="form-control me-2" type="search" 
-           placeholder="Search" aria-label="Search" name="email">
-    <br>
-    <button class="btn btn-outline-success" type="submit">
-        Search</button>
-    </form>
-        <br>
-              {% include 'friendlist.html' with friends=friends %}
-    {% endif %}
+            <form action="" method="post">
+                <p>Search user emails to add them as your friends:</p>
+                <input class="form-control search-input" type="search" placeholder="Search by email" aria-label="Search" name="email">
+                <div class="form-actions">
+                    <button class="btn btn-outline-success btn-custom" type="submit">Search</button>
+                </div>
+            </form>
+        {% endif %}
+    </div>
 
-
+    <!-- Friend List Container - Outside the Search Box -->
+    <div class="friend-list-container">
+        {% include 'friendlist.html' with friends=friends %}
+    </div>
 
 {% endblock %}

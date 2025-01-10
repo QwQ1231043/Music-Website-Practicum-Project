@@ -1,55 +1,74 @@
 {% extends 'mainpage_template.html' %}
 
 {% block body2 %}
- 
-<form method="post">
-    {% csrf_token %}
-    <div style="min-width: 350px">
-    <div class="col-12">
-        <label for="username" class="form-label">Username</label>
-        <input type="text" class="form-control" id="username" name="username" value="{{ form.username.value }}">
-  
-    </div>
+<div class="container my-5">
+    <h2 class="text-center mb-4 text-primary" style="font-size: 2.5rem;">Create an Account</h2>
+    <form method="post" onsubmit="return validateForm()">
+        {% csrf_token %}
+        
+        <!-- 用户名 -->
+        <div class="mb-3">
+            <label for="username" class="form-label fw-semibold" style="font-size: 1.1rem;">Username</label>
+            <input type="text" class="form-control form-control-lg" id="username" name="username" value="{{ form.username.value }}" placeholder="Enter your username" required style="min-width: 500px;">
+        </div>
 
-    <div class="col-12">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" name="email" value="{{ form.email.value }}">
- 
-    </div>
+        <!-- 邮箱 -->
+        <div class="mb-3">
+            <label for="email" class="form-label fw-semibold" style="font-size: 1.1rem;">Email</label>
+            <input type="email" class="form-control form-control-lg" id="email" name="email" value="{{ form.email.value }}" placeholder="Enter your email" required style="min-width: 500px;">
+        </div>
 
-    <div class="col-12">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="password" name="password" value="{{ form.password.value }}">
-  
-    </div>
+        <!-- 密码 -->
+        <div class="mb-3">
+            <label for="password" class="form-label fw-semibold" style="font-size: 1.1rem;">Password</label>
+            <input type="password" class="form-control form-control-lg" id="password" name="password" value="{{ form.password.value }}" placeholder="Enter your password" required style=",min-width: 500px;">
+        </div>
 
-    <div class="col-12">
-        <label for="password2" class="form-label">Confirm Password</label>
-        <input type="password" class="form-control" id="password2" name="password2" value="{{ form.password2.value }}">
- 
-    </div>
+        <!-- 确认密码 -->
+        <div class="mb-3">
+            <label for="password2" class="form-label fw-semibold" style="font-size: 1.1rem;">Confirm Password</label>
+            <input type="password" class="form-control form-control-lg" id="password2" name="password2" value="{{ form.password2.value }}" placeholder="Confirm your password" required style="min-width: 500px;">
+        </div>
 
-    <div class="col-12">
-        <label for="age" class="form-label">Age</label>
-        <input type="text" class="form-control" id="age" name="age" value="{{ form.age.value }}">
- 
-    </div>
-    </div>
-    <br>
-    {% if form.non_field_errors %}
-        <div class="alert alert-danger">
+        <!-- 年龄 -->
+        <div class="mb-3">
+            <label for="age" class="form-label fw-semibold" style="font-size: 1.1rem;">Age</label>
+            <input type="text" class="form-control form-control-lg" id="age" name="age" value="{{ form.age.value }}" placeholder="Enter your age" required style="max-width: 400px;">
+        </div>
+
+        <!-- 提交按钮 -->
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary btn-lg" style="font-size: 1.2rem; padding: 1rem 2rem;">Submit</button>
+        </div>
+
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger mt-3" style="font-size: 1.2rem;">
             {% for error in form.non_field_errors %}
-                <p>{{ error }}</p>
-            
+            <p>{{ error }}</p>
             {% endfor %}
         </div>
-    {% endif %}
-    {% if error_message1 %}
-        <div class="alert alert-danger">
-        <p>{{ error_message }}</p>
+        {% endif %}
+
+        {% if error_message1 %}
+        <div class="alert alert-danger mt-3" style="font-size: 1.2rem;">
+            <p>{{ error_message1 }}</p>
         </div>
-    {% endif %}
-    <br>
-    <input type="submit" value="Submit">
-</form>
+        {% endif %}
+    </form>
+</div>
+
+<script>
+    function validateForm() {
+        var password = document.getElementById("password").value;
+        var password2 = document.getElementById("password2").value;
+        
+        if (password !== password2) {
+            alert("Passwords do not match.");
+            return false;
+        }
+        
+        return true;
+    }
+</script>
+
 {% endblock %}

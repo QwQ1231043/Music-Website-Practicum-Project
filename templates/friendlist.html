@@ -6,67 +6,97 @@
     <title>Friend List</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
     <style>
-        .friend-card {
-            margin-bottom: 30px;
+        /* Flexbox container */
+        .friend-list-container {
+            display: flex;
+            flex-wrap: wrap; /* Allow cards to wrap to next row */
+            gap: 20px; /* Space between cards */
+            justify-content: flex-start; /* Align cards to the left */
+            width: 100%; /* Full width */
+            max-width: 1100px; /* Maximum container width */
+            margin: 0 auto; /* Center the container */
         }
+
+        /* Each card takes up 48% of the container's width, leaving space for gap */
+        .friend-card {
+            width: 48%; /* Take up 48% of the container, with space for gap */
+            margin-bottom: 30px; /* Bottom margin for spacing */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add transition effect for hover */
+        }
+
+        /* Hover effect for the card */
+        .friend-card:hover {
+            transform: scale(1.05); /* Scale the card slightly */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+        }
+
         .avatar-img {
             width: 150px;
             height: 150px;
             object-fit: cover;
             border-radius: 50%;
+            transition: transform 0.3s ease; /* Add transition effect for avatar hover */
         }
+
+        .avatar-img:hover {
+            transform: scale(1.1); /* Slight zoom effect on hover */
+        }
+
         .card-body {
             padding: 20px;
+        }
+
+        /* For smaller screens, cards take full width */
+        @media (max-width: 767px) {
+            .friend-card {
+                width: 100%; /* On smaller screens, each card takes full width */
+            }
+        }
+
+        /* Ensure that if there's only one card, it takes up the full width */
+        .friend-list-container .friend-card:nth-child(1) {
+            width: 528px; /* First child (when there's only one) takes up full width */
         }
     </style>
 </head>
 <body>
 
-    <div class="container mt-5">
-        <h2>Here is your friend list:</h2>
-
-        {% for friend in friends %}  <!-- Loop through each friend -->
-            <div class="card mb-4 shadow-lg friend-card">
-                <div class="row no-gutters">
-                    <!-- Avatar -->
-                    <div class="col-md-4 text-center py-3">
-                        <img src="{{ friend.avatar.url }}" class="img-fluid avatar-img" alt="User Avatar">
-                    </div>
-                    <!-- Friend Details -->
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h4 class="card-title">{{ friend.username }}</h4>
-                            <p class="card-text"><strong>Email:</strong> {{ friend.email }}</p>
-                            <p class="card-text"><strong>Age:</strong> {{ friend.age }}</p>
-                            <p class="card-text"><small class="text-muted">Joined on {{ friend.date_joined }}</small></p>
-                            <!-- Edit Button -->
-                            <a href="#" class="btn btn-primary mt-3">Edit Profile</a>
-                        </div>
+<div class="friend-list-container">
+    {% for friend_data in friends %}
+        <div class="card mb-4 shadow-lg friend-card">
+            <div class="row no-gutters">
+                <!-- Avatar -->
+                <div class="col-md-4 text-center py-3">
+                    <img src="{{ friend_data.friend.avatars.avatar.url|default:'/media/avatars/default.jpg' }}" class="img-fluid avatar-img" alt="User Avatar">
+                </div>
+                <!-- Friend Details -->
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ friend_data.friend.username }}</h4>
+                        <p class="card-text"><strong>Email:</strong> {{ friend_data.friend.email }}</p>
+                        <p class="card-text"><strong>Age:</strong> {{ friend_data.age }}</p>
+                        <p class="card-text"><small class="text-muted">Joined on {{ friend_data.friend.date_joined }}</small></p>
+                        <p class="card-text"><strong>Introduction:</strong> {{ friend_data.profile.introduction|truncatechars:100 }}</p>
+                        <form method="POST" action="{% url 'user:delete_friend' friend_data.friend.id %}" onsubmit="return confirmDeletion()">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Delete Friend</button>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>
+    {% endfor %}
+</div>
 
-            <!-- Recent Activity Section -->
-            <div class="mt-4">
-                <h5>Recent Activity</h5>
-                <div class="row">
-                    {% for video in friend.videos.all %}
-                        <div class="col-md-4 mb-4">
-                            <div class="card shadow-sm">
-                                <img src="{{ video.thumbnail_url }}" class="card-img-top" alt="Video Thumbnail">
-                                <div class="card-body">
-                                    <h6 class="card-title">{{ video.title }}</h6>
-                                    <p class="card-text">{{ video.description }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-        {% endfor %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-    </div>
+<!-- JavaScript for confirmation on friend deletion -->
+<script>
+    // Add a confirmation prompt before submitting the form
+    function confirmDeletion() {
+        return confirm("Are you sure you want to delete this friend?");
+    }
+</script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

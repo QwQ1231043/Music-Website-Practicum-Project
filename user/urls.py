@@ -14,7 +14,8 @@ urlpatterns=[
     path("likes", views.user_likes, name="likes"),
     path("management", views.user_management, name="management"),
     path("friends", views.user_friends, name="friends"),
-
+    path('delete_friend/<int:friend_id>/', views.delete_friend, name='delete_friend'),
+    path('edit_profile',views.edit_profile,name="edit_profile"),
 ]
 if settings.DEBUG:
     urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

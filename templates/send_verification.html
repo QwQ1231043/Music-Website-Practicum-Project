@@ -1,0 +1,39 @@
+{% extends 'mainpage_template.html' %}
+
+{% block body2 %}
+<div class="container my-5">
+    <h2 class="text-center text-primary mb-4" style="font-size: 2.5rem; font-weight: 600;">📧 Verify Your Email Address</h2>
+    
+    <form method="POST" class="d-flex flex-column align-items-center" style="max-width: 600px; margin: 0 auto;">
+        {% csrf_token %}
+        
+        <div class="mb-4 w-100">
+            <label for="verification_code" class="form-label fw-semibold" style="font-size: 1.1rem; color: #555;">Enter the verification code sent to your email:</label>
+            <input type="text" name="verification_code" required class="form-control form-control-lg" style="padding: 1rem; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" placeholder="Verification Code">
+        </div>
+        
+        <div class="d-flex justify-content-center w-100">
+            <button type="submit" class="btn btn-primary btn-lg" style="font-size: 1.1rem; padding: 0.75rem 2rem; border-radius: 50px; transition: transform 0.2s ease-in-out; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                Verify Code 🔒
+            </button>
+        </div>
+    </form>
+
+    {% if error_message %}
+        <div class="alert alert-danger mt-4" style="font-size: 1.2rem; text-align: center; border-radius: 10px;">
+            <p>{{ error_message }} ⚠️</p>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Add some subtle animations on hover for the button -->
+<script>
+    document.querySelector('button').addEventListener('mouseover', function() {
+        this.style.transform = 'scale(1.05)';
+    });
+    document.querySelector('button').addEventListener('mouseout', function() {
+        this.style.transform = 'scale(1)';
+    });
+</script>
+
+{% endblock %}

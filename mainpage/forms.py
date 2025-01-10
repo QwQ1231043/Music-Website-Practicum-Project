@@ -23,10 +23,8 @@ class MessageForm(forms.Form):
         if not cleaned_data1 or not cleaned_data2 or not cleaned_data3 or not cleaned_data4 or not cleaned_data5:
             raise forms.ValidationError("Please fill all the blanks")
         if exist:
-            print("email already exists")
             raise forms.ValidationError("Email already registered")
         if cleaned_data2!=cleaned_data3:
-            print("passwords do not match")
             self.add_error('password2',cleaned_data2)
             raise forms.ValidationError("Passwords do not match, please try again")
         return cleaned_data

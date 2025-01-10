@@ -1,7 +1,7 @@
 {% extends 'mainpage_template.html' %}
 
 {% block body1 %}
-<!-- CSS 样式 -->
+
 <style>
     .drop-container {
         position: relative;
@@ -88,6 +88,7 @@
         color: #333;
     }
 
+
     .video-item .video-container {
         position: relative;
     }
@@ -112,8 +113,8 @@
     }
 
     .dropdown-toggle {
-        background-color: #007bff;
-        color: #fff;
+        background-color: WHITE;
+        color: #0D6EFD;
         border-radius: 5px;
         font-weight: 500;
     }
@@ -189,13 +190,13 @@
     {% csrf_token %}
     <label for="folder_id"></label>
     <div class="input-group mb-3">
-        <button class="btn btn-outline-secondary dropdown-toggle btn-dropdown-custom" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn btn-outline-secondary dropdown-toggle btn-dropdown-custom" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:darkcyan">
             Folder
         </button>
         <ul class="dropdown-menu">
             {% for folder in folders %}
                 <li>
-                    <a class="dropdown-item" href="#" onclick="selectFolder({{ folder.id }}, '{{ folder.title }}')">
+                    <a class="dropdown-item" href="#" style='' onclick="selectFolder({{ folder.id }}, '{{ folder.title }}')">
                         {{ folder.title }}
                     </a>
                 </li>
