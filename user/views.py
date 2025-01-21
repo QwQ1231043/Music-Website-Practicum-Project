@@ -25,6 +25,7 @@ def profile(request):
     avatar = user.avatars.avatar
     age1= user_information.objects.filter(email=email).values('age')
     age=age1.first()['age']
+    like_videoes=likess.objects.filter(user=user).order_by('?')[:2]
     context={
         'username':username,
         'email':email,
@@ -32,6 +33,7 @@ def profile(request):
         'age':age,
         'avatar':avatar,
         'introduction':introduction,
+        'like_videoes':like_videoes
     }
     return render(request,'profile.html',context)
 

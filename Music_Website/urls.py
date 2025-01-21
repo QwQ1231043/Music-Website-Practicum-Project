@@ -15,17 +15,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth import authenticate
 from django.urls import path,include
 from django.shortcuts import render,HttpResponse
 from mainpage.views import mainpage_template
 from django.conf import settings
 from django.conf.urls.static import static
 from user.models import *
-
+import os
 def default_page(request):
     user = request.user
-    if user is not None:
+    avatar_path = os.path.join(settings.MEDIA_URL, 'avatars/default.jpg')
+    if user is None:
         avatar=user.avatars.avatar
+    else:
+        avatar = os.path.join(settings.MEDIA_URL, 'avatars/default.jpg')
     return render(request,'mainpage_template.html',{'avatar':avatar,'user':user})
 urlpatterns = [
     path('admin/', admin.site.urls),
