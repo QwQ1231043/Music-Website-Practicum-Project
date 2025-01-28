@@ -1,0 +1,116 @@
+{% extends 'mainpage_template.html' %}
+
+{% block body1 %}
+    <div class="container mt-5">
+        <div style="display: flex; flex-direction: row; justify-content: space-between;">
+
+            <!-- Left Section: Friend's Information (40%) -->
+            <div style="flex: 40%; display: flex; flex-direction: column; padding: 30px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);">
+                <h3 class="text-primary mb-4 text-center" style="font-size: 1.6rem; font-weight: 600; color: #333;">Friend's Profile</h3>
+
+                <!-- Avatar -->
+                <div class="mb-4 text-center">
+                    <img src="{{ friend.avatars.avatar.url }}" class="img-fluid rounded-circle shadow-sm" alt="Friend's Avatar" style="width: 180px; height: 180px; object-fit: cover;">
+                </div>
+
+                <!-- Friend Info -->
+                <div class="mb-3">
+                    <strong style="font-size: 1.1rem; color: #444;">Username:</strong>
+                    <p style="font-size: 1.15rem; color: #555;">{{ friend.username }}</p>
+                </div>
+                <div class="mb-3">
+                    <strong style="font-size: 1.1rem; color: #444;">Email:</strong>
+                    <p style="font-size: 1.15rem; color: #555;">{{ friend.email }}</p>
+                </div>
+                <div class="mb-3">
+                    <strong style="font-size: 1.1rem; color: #444;">Age:</strong>
+                    <p style="font-size: 1.15rem; color: #555;">{{ friend.age }}</p>
+                </div>
+                <div class="mb-3">
+                    <strong style="font-size: 1.1rem; color: #444;">Joined on:</strong>
+                    <p style="font-size: 1.15rem; color: #555;">{{ friend.date_joined }}</p>
+                </div>
+
+                <!-- Bio Section -->
+                <div class="mt-4">
+                    <h5 style="font-size: 1.2rem; font-weight: 600; color: #444;">Bio：</h5>
+                    <p style="font-size: 1rem; color: #666;">{{ friend.userprofile.introduction }}</p>
+                </div>
+
+                <!-- Friend's Edit Profile Button (If needed) -->
+                <div class="mt-4 text-center">
+                    {% if request.user == friend %}
+                        <a href="{% url 'user:edit_profile' %}" class="btn btn-primary btn-lg" style="border-radius: 25px; padding: 10px 30px; font-weight: 500;">Edit Profile</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Dividing Line -->
+            <div style="border-left: 1px solid #ddd; margin: 0 20px;"></div>
+
+            <!-- Right Section: Friend's Videos (60%) -->
+            <div style="flex: 60%; display: flex; flex-direction: column; padding: 30px; background-color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); width: 780px;">
+                <h3 class="text-primary mb-4" style="font-size: 1.6rem; font-weight: 600; color: #333;">About {{ friend.username }}</h3>
+                <p style="font-size: 1.15rem; color: #555;">Friend's liked videos</p>
+
+                {% for obj in like_videoes %}
+                    <!-- Modified Video Card -->
+                    <div class="video-card rounded-lg shadow-lg p-3 mb-4" style="width: 350px; background-color: #f3f3f3; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid #ddd; margin-right: 20px;">
+                        <!-- Video Section -->
+                        <div class="video-container mb-3" style="border-radius: 8px; overflow: hidden;">
+                            <video class="w-100" height="200" controls>
+                                <source src="{{ obj.video.video.url }}" type="video/mp4">
+                            </video>
+                        </div>
+
+                        <!-- Video Information Section -->
+                        <div class="video-info" style="display: flex; flex-direction: column; gap: 8px;">
+                            <h5 class="video-title" style="font-size: 1.3rem; font-weight: 600; color: #333; margin-bottom: 6px; letter-spacing: 0.5px;">
+                                <a href="{{ obj.video.get_absolute_url }}" style="color: #333; text-decoration: none; transition: color 0.3s ease;">{{ obj.video.title }} </a>
+                            </h5>
+                            <p class="video-description" style="font-size: 1rem; color: #555; line-height: 1.4; transition: color 0.3s ease;">
+                                {{ obj.video.description|truncatewords:15 }}
+                            </p>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <p class="video-uploader" style="font-size: 0.9rem; color: #777; font-style: italic; margin-top: 5px;">
+                                    Uploaded by: {{ obj.video.user.username }} 👤
+                                </p>
+                                <a href="{{ obj.video.get_absolute_url }}" class="btn btn-primary btn-sm" style="font-size: 0.9rem; padding: 5px 12px; border-radius: 20px; background-color: #007bff; color: #fff;">Watch</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <hr>
+            
+            </div>
+
+        </div>
+    </div>
+
+    <style>
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                display: block;
+            }
+
+            .container div {
+                flex: 100%;
+                margin-bottom: 20px;
+            }
+
+            /* Remove dividing line on smaller screens */
+            .container div + div {
+                border-left: none;
+                margin-left: 0;
+            }
+
+            /* Adjust video cards for smaller screens */
+            .video-card {
+                width: 100%;
+                margin-right: 0;
+            }
+        }
+    </style>
+{% endblock %}

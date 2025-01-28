@@ -64,3 +64,9 @@ class userprofile(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
     age=models.IntegerField(default=0)
     introduction=models.CharField(max_length=500,default='This user is too lazy to leave anything behind.')
+
+class comments(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    video = models.ForeignKey(management, related_name="comments", on_delete=models.CASCADE,default=None)
+    comment=models.CharField(max_length=700)
+    created_at=models.DateTimeField(auto_now_add=True)

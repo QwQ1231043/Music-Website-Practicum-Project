@@ -3,11 +3,26 @@
 {% block body1 %}
 
 <script>
-function selectFolder(folderId, folderTitle) {
-    document.getElementById('folder_id').value = folderId;
-    console.log('Selected Folder:', folderTitle);
-    document.forms['folderForm'].submit();
-}
+    // 选择文件夹时，设置隐藏字段并提交表单
+    function selectFolder(folderId, folderTitle) {
+        // 设置隐藏字段的值为选中的文件夹ID
+        document.getElementById('folder_id').value = folderId;
+
+        // 输出选中的文件夹标题到控制台（用于调试）
+        console.log('Selected Folder:', folderTitle);
+
+        // 提交表单
+        document.forms['folderForm'].submit();
+    }
+
+    // 移动视频到另一个文件夹的处理函数
+    function submitMoveForm(folderId, videoId) {
+        // 设置选中的文件夹ID到隐藏字段
+        document.getElementById('move_folder_id_' + videoId).value = folderId;
+
+        // 提交对应的视频移动表单
+        document.querySelector('#move_video_form_' + videoId).submit();
+    }
 </script>
 
 <!-- Container for creating new folders -->
@@ -54,9 +69,18 @@ function selectFolder(folderId, folderTitle) {
             <div class="col-12 col-md-6 col-lg-4" style="width: 420px;">
                 <div class="video-item shadow-lg rounded-lg p-3">
                     <!-- Video Section -->
-                    <video class="w-100 rounded" height="250" controls>
+                    {% if '.mp3' in video.video.url or '.wav' in video.video.url %}
+                    <img src="/media/avatars/default_cover_image.jpg" width="100%" height="225" alt="Audio Cover Image">
+                    <audio controls>
+                        <source src="{{ video.video.url }}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                {% else %}
+            
+                <video width="100%" height="225" controls>
                         <source src="{{ video.video.url }}" type="video/mp4">
                     </video>
+                {% endif %}
 
                     <!-- Video Title -->
                     <h5 class="video-title mt-3">{{ video.title }}</h5>
@@ -69,6 +93,30 @@ function selectFolder(folderId, folderTitle) {
                         <p><strong>Uploaded by:</strong> {{ video.user.username }}</p>
                         <p><strong>Upload Time:</strong> {{ video.upload_time|date:"Y-m-d H:i" }}</p>
                     </div>
+
+                    <!-- Move to Folder Button -->
+                    <form id="move_video_form_{{ video.id }}" method="POST" action="{% url 'user:flavorite' %}" class="mt-2">
+                        {% csrf_token %}
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Move video to another Folder
+                            </button>
+                            <ul class="dropdown-menu">
+                                {% for folder in folders %}
+                                    <li>
+                                        <a class="dropdown-item" href="#" onclick="submitMoveForm({{ folder.id }}, {{ video.id }})">
+                                            {{ folder.title }}
+                                        </a>
+                                    </li>
+                                {% empty %}
+                                    <a class="dropdown-item" href="#">No folders available</a>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <input type="hidden" name="move_folder" value="true">
+                        <input type="hidden" name="folder_id" id="move_folder_id_{{ video.id }}" value="">
+                        <input type="hidden" name="video_id" value="{{ video.id }}">
+                    </form>
 
                     <!-- Delete Video Button -->
                     <form method="POST" action="{% url 'user:delete_video_from_folder' selected_folder.id video.id %}" onsubmit="return confirm('Are you sure you want to remove this video from the folder?')">

@@ -87,7 +87,16 @@
                 <br>
                 <p class="error-message">Sorry, the user you entered does not exist. Please try again.</p>
             </form>
-
+        {% elif error3 %}
+                      <form action="" method="post">
+                <p>Search user emails to add them as your friends:</p>
+                <input class="form-control search-input" type="search" placeholder="Search by email" aria-label="Search" name="email">
+                <div class="form-actions">
+                    <button class="btn btn-outline-success btn-custom" type="submit">Search</button>
+                </div>
+                <br>
+                <p class="error-message">Sorry, you cannot add yourself.</p>
+            </form>
         {% else %}
             <form action="" method="post">
                 <p>Search user emails to add them as your friends:</p>

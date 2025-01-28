@@ -213,11 +213,12 @@
 
                 <!-- Video Upload -->
                 <div class="mb-3">
-                    <label for="video" class="drop-container">
+                    <label for="video" class="drop-container" id="video-drop-container">
                         <span class="drop-title">Drag your file here or click to select</span>
                         <input class="file-block" type="file" id="video" name="video" required>
                     </label>
                     <div id="file-name" style="margin-top: 10px;"></div>
+                    <div id="file-preview"></div>
                 </div>
             </div>
 
@@ -277,9 +278,19 @@
     {% for video in videos %}
         <div class="video-item">
             <div class="video-container">
+            {% if '.mp3' in video.video.url or '.wav' in video.video.url %}
+              
+                    <img src="/media/avatars/default_cover_image.jpg" width="100%" height="225" alt="Audio Cover Image">
+                    <audio controls>
+                        <source src="{{ video.video.url }}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                {% else %}
+            
                 <video width="100%" height="225" controls>
-                    <source src="{{ video.video.url }}" type="video/mp4">
-                </video>
+                        <source src="{{ video.video.url }}" type="video/mp4">
+                    </video>
+                {% endif %}
             </div>
             <div class="video-title">Video title: {{ video.title }}</div>
             <div class="video-desc">Video description: {{ video.description }}</div>
@@ -296,12 +307,60 @@
     document.addEventListener('DOMContentLoaded', function() {
         const videoInput = document.getElementById('video');
         const fileName = document.getElementById('file-name');
+        const dropContainer = document.getElementById('video-drop-container');
+        const filePreview = document.getElementById('file-preview');
 
         videoInput.addEventListener('change', function() {
             if (videoInput.files.length > 0) {
                 fileName.textContent = videoInput.files[0].name;
+                const file = videoInput.files[0];
+
+                // Check if it's an audio or video file
+                const fileType = file.type;
+                if (fileType.startsWith('audio/')) {
+                    // If audio, show default image
+                    filePreview.innerHTML = `<img src="/media/avatars/default_cover_image.jpg" alt="Audio Cover" width="100%" height="200px">`;
+                } else if (fileType.startsWith('video/')) {
+                    // If video, show video player
+                    filePreview.innerHTML = `<video width="100%" height="200px" controls><source src="${URL.createObjectURL(file)}" type="${fileType}"></video>`;
+                } else {
+                    filePreview.innerHTML = ''; // Clear preview for unsupported file types
+                }
             } else {
                 fileName.textContent = '';
+                filePreview.innerHTML = '';
+            }
+        });
+
+        // Handle dragover event
+        dropContainer.addEventListener('dragover', function(event) {
+            event.preventDefault();
+            dropContainer.classList.add('dragover');
+        });
+
+        // Handle dragleave event
+        dropContainer.addEventListener('dragleave', function() {
+            dropContainer.classList.remove('dragover');
+        });
+
+        // Handle drop event
+        dropContainer.addEventListener('drop', function(event) {
+            event.preventDefault();
+            dropContainer.classList.remove('dragover');
+
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                videoInput.files = files;
+                fileName.textContent = files[0].name;
+                const file = files[0];
+
+                // Check file type and show preview accordingly
+                const fileType = file.type;
+                if (fileType.startsWith('audio/')) {
+                    filePreview.innerHTML = `<img src="/media/avatars/default_cover_image.jpg" alt="Audio Cover" width="100%" height="200px">`;
+                } else if (fileType.startsWith('video/')) {
+                    filePreview.innerHTML = `<video width="100%" height="200px" controls><source src="${URL.createObjectURL(file)}" type="${fileType}"></video>`;
+                }
             }
         });
     });

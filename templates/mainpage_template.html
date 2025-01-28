@@ -12,14 +12,14 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #495057;
             transition: all 0.3s ease;
-            opacity: 0; /* 页面加载时初始透明 */
-            transition: opacity 0.3s ease-in-out; /* 改快渐变效果 */
+            opacity: 0; 
+            transition: opacity 0.3s ease-in-out; 
         }
 
         /* Navbar */
         .navbar {
             background-color: #343a40;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 增加阴影 */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
             padding: 15px 30px;
         }
 
@@ -31,18 +31,17 @@
 
         .navbar .nav-link.active {
             color: #ffc107 !important;
-            transform: scale(1.1); /* 激活链接有轻微放大效果 */
+            transform: scale(1.1); 
         }
 
         .navbar .nav-link:hover {
-            color: #ffc107 !important; /* 悬停时改变颜色 */
+            color: #ffc107 !important;
         }
 
         .navbar .nav-item + .nav-item {
             margin-left: 20px;
         }
 
-        /* 侧边栏 */
         .sidebar {
             background-color: #ffffff;
             border-right: 1px solid #ddd;
@@ -88,7 +87,7 @@
             font-weight: bold;
         }
 
-        /* 主内容 */
+
         .main-content {
             margin-left: 100px;
             padding: 30px;
@@ -127,7 +126,7 @@
             background-color: #007bff;
             color: #fff;
             border: none;
-            border-radius: 6px; /* 增加圆角 */
+            border-radius: 6px; 
             padding: 10px 15px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: background-color 0.2s ease, box-shadow 0.2s ease;
@@ -138,13 +137,13 @@
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
         }
 
-        /* 工具提示 */
+
         .sidebar .nav-link span {
             margin-left: 10px;
             font-size: 1rem;
         }
 
-        /* 侧边栏内的链接 */
+
         .sidebar .nav-link {
             display: flex;
             align-items: center;
@@ -157,13 +156,13 @@
             margin-right: 15px;
         }
 
-        /* 侧边栏底部按钮 */
+
         .sidebar .btn-custom {
             width: 100%;
             margin-bottom: 10px;
         }
 
-        /* 文字动画 */
+
         .navbar a {
             font-weight: 500;
         }
@@ -189,9 +188,8 @@
             </a>
             <ul class="nav nav-pills">
                 <li class="nav-item"><a href="{% url 'mainpage:user_mainpage' %}" class="nav-link active" aria-current="page">Home</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
+                <li class="nav-item"></li>
+                <li class="nav-item"></li>
                 <li class="nav-item"><a href="#" class="nav-link">About</a></li>
             </ul>
         </header>

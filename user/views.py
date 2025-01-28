@@ -1,11 +1,12 @@
 import os
+import random
 
 from django.db.models import manager
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.models import User
 from django import forms
 from user.forms import Video, ManagementFolderForm, EditProfileForm, changed_data
-from user.models import user_information, friends, management, likess, like, folderss, management_folders,avatars, userprofile
+from user.models import user_information, friends, management, likess, like, folderss, management_folders,avatars, userprofile,comments
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -53,6 +54,19 @@ def user_flavorite(request):
             return redirect('user:flavorite')
     folders = folderss.objects.filter(user=request.user)
     folder_id=request.POST.get('folder_id')
+    if 'move_folder' in request.POST:
+        folder_id = request.POST.get('folder_id')
+        video_id = request.POST.get('video_id')
+        video = management.objects.get(id=video_id)
+
+        target_folder = folderss.objects.get(user=request.user, id=folder_id)
+        current_folder = folderss.objects.filter(user=request.user, video=video).first()
+        if current_folder:
+            current_folder.video.remove(video)
+        if video not in target_folder.video.all():
+            target_folder.video.add(video)
+        video.save()
+        return redirect('user:flavorite')
     if folder_id:
         forlder=folderss.objects.get(user=request.user, id=folder_id)
         videos=forlder.video.all()
@@ -95,6 +109,12 @@ def user_management(request):
             title=form.cleaned_data['title']
             description=form.cleaned_data['description']
             video=form.cleaned_data['video']
+            file_type=video.content_type
+            is_audio=file_type.startswith('audio/')
+            if is_audio:
+                cover_image_url='/media/avatars/default_cover_image.jpg'
+            else:
+                cover_image_url=None
             user=request.user
             object=management(title=title,description=description,video=video,user=user)
             object.save()
@@ -167,6 +187,9 @@ def user_friends(request):
     if request.method == 'POST':
         email = request.POST['email']
         if User.objects.filter(email=email).exists():
+            if email == user.email:
+                context = {'error3': True, 'user': user, 'avatar': avatar1}
+                return render(request, 'friends.html', context)
             target = User.objects.get(email=email)
             context = {'target': target,'user':user,'avatar':avatar1}
             if 'add' in request.POST:
@@ -178,6 +201,7 @@ def user_friends(request):
                     return render(request, 'friends.html', context)
             return render(request, 'friends.html', context)
         context = {'error': True,'user':user,'avatar':avatar1}
+
         return render(request, 'friends.html', context)
 
 
@@ -189,6 +213,13 @@ def delete_friend(request,friend_id):
         friendship.delete()
         return redirect('user:friends')
 
+
+def friend_page(request, friend_id):
+    friend = friends.objects.get(user=request.user, friends__id=friend_id).friends
+    like_videoes = likess.objects.filter(user=friend)
+    user=request.user
+    avatar=user.avatars.avatar
+    return render(request, 'friend_page.html', {'friend': friend,'like_videoes':like_videoes,'user':user,'avatar':avatar})
 
 def edit_profile(request):
     user = request.user
@@ -249,3 +280,29 @@ def delete_video_from_folder(request, folder_id, video_id):
     video = get_object_or_404(management, id=video_id, user=user)
     folder.video.remove(video)
     return redirect('user:flavorite')
+
+
+def view_specific_video(request, video_id):
+    video = get_object_or_404(management, id=video_id)
+    avatar = request.user.avatars.avatar
+    comments_list = video.comments.all()
+    all_videos = list(management.objects.exclude(id=video_id))
+    recommended_videos = random.sample(all_videos, 5)
+    liked_video = likess.objects.filter(video=video, user=request.user).exists()
+    if request.method == "POST":
+        if 'like' in request.POST:
+            if not liked_video:
+                likess.objects.create(video=video, user=request.user)
+            return redirect('user:view_specific_video', video_id=video.id)
+        comment_text = request.POST.get('comment_text')
+        user = request.user
+        if comment_text:
+            comments.objects.create(user=user, comment=comment_text, video=video)
+        return redirect('user:view_specific_video', video_id=video.id)
+    return render(request, "video_page.html", {
+        'video': video,
+        'avatar': avatar,
+        'comments': comments_list,
+        'recommended_videos': recommended_videos,
+        'liked_video': liked_video
+    })

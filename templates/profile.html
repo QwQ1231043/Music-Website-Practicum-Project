@@ -56,9 +56,19 @@
                     <div class="video-card rounded-lg shadow-lg p-3 mb-4" style="width: 350px; background-color: #f3f3f3; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid #ddd; margin-right: 20px;">
                         <!-- Video Section -->
                         <div class="video-container mb-3" style="border-radius: 8px; overflow: hidden;">
-                            <video class="w-100" height="200" controls>
-                                <source src="{{ obj.video.video.url }}" type="video/mp4">
-                            </video>
+                        {% if '.mp3' in obj.video.video.url or '.wav' in obj.video.video.url %}
+              
+                    <img src="/media/avatars/default_cover_image.jpg" width="100%" height="225" alt="Audio Cover Image">
+                    <audio controls>
+                        <source src="{{ obj.video.video.url }}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                {% else %}
+            
+                <video width="100%" height="225" controls>
+                        <source src="{{ obj.video.video.url }}" type="video/mp4">
+                    </video>
+                {% endif %}
                         </div>
 
                         <!-- Video Information Section -->

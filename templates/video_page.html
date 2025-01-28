@@ -1,0 +1,121 @@
+{% extends 'mainpage_template.html' %}
+
+{% block body1 %}
+<p class="welcome-text text-center text-primary font-weight-bold" style="font-size: 2rem;">Welcome 🌟 {{ user.username }}! Enjoy the video! 🎬</p>
+
+<div class="container my-5">
+    <div class="row">
+        <!-- Video Section -->
+        <div class="col-12 col-md-8 mb-5">
+            <div class="card shadow-lg rounded-lg border-light">
+                <div class="card-img-top embed-responsive embed-responsive-16by9">
+        {% if '.mp3' in video.video.url or '.wav' in video.video.url %}
+              
+                    <img src="/media/avatars/default_cover_image.jpg" width="100%" height="450" alt="Audio Cover Image">
+                    <audio controls>
+                        <source src="{{ video.video.url }}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                {% else %}
+            
+                <video width="100%" min-height="600" controls style="max-height:750px">
+                        <source src="{{ video.video.url }}" type="video/mp4">
+                    </video>
+                {% endif %}
+                </div>
+                <div class="card-body" style="padding-bottom: 10px;">
+                    <h5 class="card-title text-dark font-weight-bold">{{ video.title }}</h5>
+                    <p class="card-text text-muted">{{ video.description }}</p>
+
+                    <!-- Like Button -->
+                    <form action="" method="post" style="display: inline-block;">
+                        {% csrf_token %}
+                        <input type="hidden" name="video_id" value="{{ video.id }}">
+                        <button type="submit" name="like" class="btn btn-outline-primary btn-lg px-5 py-3 mt-3" style="border-radius: 50px; font-size: 1.1rem;">
+                            {% if liked_video %}
+                                <i class="fas fa-thumbs-up"></i> Already Liked
+                            {% else %}
+                                <i class="fas fa-thumbs-up"></i> 👍 Like
+                            {% endif %}
+                        </button>
+                    </form>
+
+                    <!-- Author and Published Info -->
+                    <div class="d-flex justify-content-between align-items-center mt-3 text-muted" style="font-size: 0.9rem;">
+                        <small>Published on {{ video.upload_time }}</small>
+                        <small>By: {{ video.user.username }}</small>
+                    </div>
+                </div>
+
+                <!-- Recommended Videos Section -->
+                <div class="card-body">
+                    <h5 class="card-title text-dark">Recommended Videos</h5>
+                    <hr>
+                    <div class="row">
+                        {% for recommended_video in recommended_videos %}
+                        <div class="col-12 col-md-4 mb-4">
+                            <div class="card shadow-sm">
+                                <!-- Video Thumbnail (Using the <video> tag) -->
+                                <div class="card-img-top" style="height: 200px; overflow: hidden;">
+                                    <video controls style="width: 100%; height: 100%; object-fit: contain;">
+                                        <source src="{{ recommended_video.video.url }}" type="video/mp4">
+                                    </video>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="card-title text-dark">{{ recommended_video.title }}</h6>
+                                    <a href="{% url 'user:view_specific_video' recommended_video.id %}" class="btn btn-outline-primary btn-sm rounded-pill px-4 py-2" style="transition: all 0.3s ease;">
+                                        Watch Now
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                            <p>No recommendations available.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="col-12 col-md-4 mb-4">
+            <div class="card mt-4 shadow-lg border-light">
+                <div class="card-body">
+                    <h5 class="card-title text-dark">Comments</h5>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <textarea name="comment_text" class="form-control mb-3" rows="4" placeholder="Add a comment..." style="border-radius: 10px;"></textarea>
+                        <button type="submit" class="btn btn-primary mt-2 w-100" style="border-radius: 10px;">Submit Comment</button>
+                    </form>
+
+                    <h6 class="mt-4 text-dark">All Comments</h6>
+                    <div style="max-height: 450px; overflow-y: auto; padding-right: 10px;">
+                        {% for comment in comments %}
+                        <div class="comment mt-3 d-flex align-items-start border-bottom pb-3">
+                            <!-- User Avatar -->
+                            <div class="comment-avatar" style="width: 45px; height: 45px; margin-right: 15px;">
+                                {% if comment.user.avatars.avatar %}
+                                    <img src="{{ comment.user.avatars.avatar.url }}" alt="User Avatar" class="img-fluid rounded-circle" style="width: 100%; height: 100%; object-fit: cover;">
+                                {% else %}
+                                    <img src="avatars/default.jpg" alt="Default Avatar" class="img-fluid rounded-circle" style="width: 100%; height: 100%; object-fit: cover;">
+                                {% endif %}
+                            </div>
+
+                            <!-- Comment Content -->
+                            <div class="comment-text" style="flex: 1; word-wrap: break-word; max-width: calc(100% - 60px);">
+                                <strong>{{ comment.user.username }}</strong><br>
+                                <p>{{ comment.comment }}</p>
+                                <small class="text-muted" style="font-size: 0.8rem;">{{ comment.created_at }}</small>
+                            </div>
+                        </div>
+                        {% empty %}
+                            <p>No comments yet. Be the first to comment!</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

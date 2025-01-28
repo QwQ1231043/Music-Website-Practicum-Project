@@ -1,7 +1,7 @@
 {% extends 'mainpage_template.html' %}
 
 {% block body1 %}
-<p class="welcome-text">Welcome 🌟 dz-kings, click home to refresh videos 🔄</p>
+<p class="welcome-text">Welcome 🌟 {{ user.username }}, click home to refresh videos 🔄</p>
 
 <script>
     function submitFavoriteForm(folderId, videoId) {
@@ -164,32 +164,79 @@
         margin-top: 20px;
         text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1); /* Soft shadow for a cute effect */
     }
+    
+    .like-count {
+        font-size: 1rem;
+        color: #888;
+        margin-left: 10px;
+        font-weight: bold;
+    }
+      .like-section {
+        display: flex;
+        align-items: center;
+        font-size: 1rem;
+        color: #ff6347; /* 番茄色，用于点赞数 */
+    }
+
+    .like-section .fas {
+        margin-right: 5px;
+    }
+
+    .like-count {
+        font-size: 1.1rem;
+    }
+        .heart-icon {
+        width: 16px;
+        height: 16px;
+        background-color: #ff6347;
+        clip-path: polygon(50% 0%, 0% 35%, 50% 100%, 100% 35%);
+        margin-left: 5px;
+        display: inline-block;
+    }
 </style>
 
 <div class="container">
     <div class="row" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start;">
-        {% for obj in videos %}
+        {% for item in videos_with_likes %}
         <div class="col-12 col-md-6 col-lg-4 video-card">
             <div class="card">
-                <!-- Video Section -->
-                <div class="card-img-top">
-                    <video width="100%" height="225" controls>
-                        <source src="{{ obj.video.url }}" type="video/mp4">
+         
+                <a href="{% url 'user:view_specific_video' item.video.id %}" class="card-img-top">
+      {% if '.mp3' in item.video.video.url or '.wav' in item.video.video.url %}
+              
+                    <img src="/media/avatars/default_cover_image.jpg" width="100%" height="225" alt="Audio Cover Image">
+                    <audio controls>
+                        <source src="{{ item.video.video.url }}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                {% else %}
+            
+                <video width="100%" height="225" controls>
+                        <source src="{{ item.video.video.url }}" type="video/mp4">
                     </video>
-                </div>
+                {% endif %}
+                </a>
                 <div class="card-body">
-                    <h5 class="card-title">Title: {{ obj.title }}</h5>
-                    <p class="card-text">Description: {{ obj.description }}</p>
+                    <h5 class="card-title">Title: {{ item.video.title }}</h5>
+                    <p class="card-text">Description: {{ item.video.description }}</p>
+                    <div class="like-section">
+                        <span class="heart-icon"></span>
+                        <span class="like-count">{{ item.like_count }} Likes</span>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
                             <!-- Like Button -->
-                            <form action="" method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="video_id" value="{{ obj.id }}">
-                                <button type="submit" class="btn btn-sm btn-outline-secondary" name="like">👍 Like</button>
-                            </form>
+                            {% if item.video.id in liked_videos %}
+                                <button type="submit" class="btn btn-sm btn-outline-secondary" name="like">Already Liked</button>
+                            {% else %}
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="video_id" value="{{ item.video.id }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary" name="like">👍 Like</button>
+                                </form>
+                            {% endif %}
 
                             <!-- Add to Favorites Dropdown -->
                             <form action="" method="post">
@@ -200,7 +247,7 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         {% for folder in folders %}
-                                            <a class="dropdown-item" href="#" onclick="submitFavoriteForm('{{ folder.id }}', '{{ obj.id }}')">
+                                            <a class="dropdown-item" href="#" onclick="submitFavoriteForm('{{ folder.id }}', '{{ item.video.id }}')">
                                                 {{ folder.title }}
                                             </a>
                                         {% empty %}
@@ -220,7 +267,7 @@
                         </form>
 
                         <!-- Video Info -->
-                        <small class="text-body-secondary">Published on {{ obj.upload_time }}<br> By: {{ obj.user.username }}</small>
+                        <small class="text-body-secondary">Published on {{ item.video.upload_time }}<br> By: {{ item.video.user.username }}</small>
                     </div>
                 </div>
             </div>
@@ -229,8 +276,4 @@
     </div>
 </div>
 
-{% endblock %}
-
-{% block body3 %}
-    <p>Welcome back, {{ user.username }}!</p>
 {% endblock %}

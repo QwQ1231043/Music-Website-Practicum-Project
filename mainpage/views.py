@@ -94,23 +94,30 @@ def Management(request):
     print(email)
     return redirect('mainpage:mainpage')
 def user_mainpage(request):
-    videos=management.objects.all().order_by('?')[:10]
+    videos=management.objects.all().order_by('?')[:8]
+    videos_with_likes = []
+    for video in videos:
+        like_count = likess.objects.filter(video=video).count()
+        videos_with_likes.append({'video': video, 'like_count': like_count})
     folders=folderss.objects.filter(user=request.user)
     user=request.user
     avatar=user.avatars.avatar
+    liked_videos=likess.objects.filter(user=user).values_list('video',flat=True)
     if request.method == "POST":
         if 'like' in request.POST:
             video_id=request.POST.get('video_id')
             video=management.objects.get(id=video_id)
-            oo=likess.objects.create(video=video,user=user)
+            if not likess.objects.filter(video=video, user=user).exists():
+                likess.objects.create(video=video, user=user)
             return redirect('mainpage:user_mainpage')
         if 'favorite' in request.POST:
             video_id = request.POST.get('video_id')
             video = management.objects.get(id=video_id)
             folder_id = request.POST.get('folder_id')
             folder = folderss.objects.get(id=folder_id, user=user)
-            folder.video.add(video)
-            folder.save()
+            if not folder.video.filter(id=video_id).exists():
+                folder.video.add(video)
+                folder.save()
             return redirect('mainpage:user_mainpage')
-    context = {'user':user,'videos':videos,'folders':folders,'avatar':avatar}
+    context = {'user':user,'videos':videos,'folders':folders,'avatar':avatar,'liked_videos':liked_videos,'videos_with_likes':videos_with_likes}
     return render(request, "user_mainpage.html", context)

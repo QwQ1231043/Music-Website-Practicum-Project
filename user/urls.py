@@ -18,6 +18,8 @@ urlpatterns=[
     path('edit_profile',views.edit_profile,name="edit_profile"),
     path('delete_video_from_folder/<int:folder_id>/<int:video_id>/', views.delete_video_from_folder,
          name='delete_video_from_folder'),
+    path('friend/<int:friend_id>/', views.friend_page, name='friend_page'),
+    path('video_page/<int:video_id>/',views.view_specific_video,name='view_specific_video'),
 ]
 if settings.DEBUG:
     urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
