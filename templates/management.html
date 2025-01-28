@@ -295,8 +295,15 @@
             <div class="video-title">Video title: {{ video.title }}</div>
             <div class="video-desc">Video description: {{ video.description }}</div>
             <div class="video-actions">
-                <button class="btn btn-watch">Watch</button>
-                <button class="btn btn-details">Details</button>
+            <form method="POST" action="{% url 'user:view_specific_video' video.id %}" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-watch">Watch</button>
+</form>
+                
+             <form method="POST" action="{% url 'user:delete_video' video.id %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
             </div>
         </div>
     {% endfor %}

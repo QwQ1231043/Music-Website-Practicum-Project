@@ -3,24 +3,24 @@
 {% block body1 %}
 
 <script>
-    // 选择文件夹时，设置隐藏字段并提交表单
+
     function selectFolder(folderId, folderTitle) {
-        // 设置隐藏字段的值为选中的文件夹ID
+
         document.getElementById('folder_id').value = folderId;
 
-        // 输出选中的文件夹标题到控制台（用于调试）
+
         console.log('Selected Folder:', folderTitle);
 
-        // 提交表单
+
         document.forms['folderForm'].submit();
     }
 
-    // 移动视频到另一个文件夹的处理函数
+
     function submitMoveForm(folderId, videoId) {
-        // 设置选中的文件夹ID到隐藏字段
+
         document.getElementById('move_folder_id_' + videoId).value = folderId;
 
-        // 提交对应的视频移动表单
+
         document.querySelector('#move_video_form_' + videoId).submit();
     }
 </script>
@@ -76,7 +76,7 @@
                         Your browser does not support the audio element.
                     </audio>
                 {% else %}
-            
+
                 <video width="100%" height="225" controls>
                         <source src="{{ video.video.url }}" type="video/mp4">
                     </video>
@@ -118,11 +118,17 @@
                         <input type="hidden" name="video_id" value="{{ video.id }}">
                     </form>
 
-                    <!-- Delete Video Button -->
-                    <form method="POST" action="{% url 'user:delete_video_from_folder' selected_folder.id video.id %}" onsubmit="return confirm('Are you sure you want to remove this video from the folder?')">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger mt-2">Remove Video from Folder</button>
-                    </form>
+                    <form method="POST" class="mt-2">
+                        
+                    <form method="POST" class="mt-2">
+    {% csrf_token %}
+    <input type="hidden" name="folder_id" id="move_folder_id_{{ video.id }}" value="{{ selected_folder.id }}">
+    <input type="hidden" name="video_id" value="{{ video.id }}">
+    <input type="hidden" name="delete_folder" value="true">
+    <button type="submit" class="btn btn-danger">
+        Remove video from folder
+    </button>
+</form>
                 </div>
             </div>
         {% endfor %}

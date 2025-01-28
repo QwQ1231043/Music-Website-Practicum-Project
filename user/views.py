@@ -40,20 +40,24 @@ def profile(request):
 
 
 def user_flavorite(request):
-    user=request.user
+    user = request.user
     avatar = user.avatars.avatar
-    default_folder=folderss(user=request.user,title='default')
-    correction=folderss.objects.filter(user=request.user,title='default')
+    default_folder = folderss(user=request.user, title='default')
+    correction = folderss.objects.filter(user=request.user, title='default')
+
     if not correction.exists():
         default_folder.save()
+
     if 'create_folder' in request.POST:
         title = request.POST.get('title')
         if title:
-            new_folder=folderss.objects.create(user=request.user,title=title)
+            new_folder = folderss.objects.create(user=request.user, title=title)
             new_folder.save()
             return redirect('user:flavorite')
+
     folders = folderss.objects.filter(user=request.user)
-    folder_id=request.POST.get('folder_id')
+    folder_id = request.POST.get('folder_id')
+
     if 'move_folder' in request.POST:
         folder_id = request.POST.get('folder_id')
         video_id = request.POST.get('video_id')
@@ -61,27 +65,35 @@ def user_flavorite(request):
 
         target_folder = folderss.objects.get(user=request.user, id=folder_id)
         current_folder = folderss.objects.filter(user=request.user, video=video).first()
+
         if current_folder:
             current_folder.video.remove(video)
         if video not in target_folder.video.all():
             target_folder.video.add(video)
+
         video.save()
         return redirect('user:flavorite')
+    if 'delete_folder' in request.POST:
+        folder_id = request.POST.get('folder_id')
+        video_id = request.POST.get('video_id')
+        folder = get_object_or_404(folderss, id=folder_id)
+        video = get_object_or_404(management, id=video_id)
+        folder.video.remove(video)
     if folder_id:
-        forlder=folderss.objects.get(user=request.user, id=folder_id)
-        videos=forlder.video.all()
+        selected_folder = folderss.objects.get(user=request.user, id=folder_id)
+        videos = selected_folder.video.all()
     else:
-        forlder=folderss.objects.filter(user=request.user).first()
-        videos=forlder.video.all()
-    context={
-        'folders':folders,
-        'selected_folder':forlder,
-        'videos':videos,
-        'user':user,
-        'avatar':avatar,
+        selected_folder = folderss.objects.filter(user=request.user).first()
+        videos = selected_folder.video.all()
+    context = {
+        'folders': folders,
+        'selected_folder': selected_folder,
+        'videos': videos,
+        'user': user,
+        'avatar': avatar,
     }
-    return render(request, 'flavorite.html', context)
 
+    return render(request, 'flavorite.html', context)
 
 def user_likes(request):
     user=request.user
@@ -140,11 +152,6 @@ def user_management(request):
                     new_folder.save()
 
             return redirect('user:management')
-        if 'delete' in request.POST:
-            video_id=request.POST.get('video_id')
-            video=management.objects.filter(id=video_id)
-            video.delete()
-            return redirect('user:management')
     forlder_id1=request.POST.get('folder_id')
     if forlder_id1:
         selected_forlder=management_folders.objects.filter(user=request.user,id=forlder_id1).first()
@@ -158,6 +165,15 @@ def user_management(request):
     folders=management_folders.objects.filter(user=request.user)
     return render(request,'management.html',context={'videos':videos,'folders':folders,'selected_folder':selected_forlder,'user':user,'avatar':avatar})
 
+def delete_video(request, video_id):
+    if request.method == "POST":
+        video = get_object_or_404(management, id=video_id)
+        video_file_path = video.video.path
+        if os.path.exists(video_file_path):
+            os.remove(video_file_path)
+        video.delete()
+        return redirect('user:management')
+    return redirect('user:management')
 
 
 def user_friends(request):
