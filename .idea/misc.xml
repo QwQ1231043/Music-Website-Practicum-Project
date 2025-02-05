@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="Python 3.12 (Music_Website)" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Remote Python 3.9.20 (sftp://ec2-user@18.216.239.4:22/home/ec2-user/.virtualenvs/Music_Website/bin/python)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.12 (Music_Website)" project-jdk-type="Python SDK" />
 </project>
