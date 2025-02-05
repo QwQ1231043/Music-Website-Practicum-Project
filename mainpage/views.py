@@ -16,9 +16,13 @@ from django.core.mail import send_mail
 @require_http_methods(['GET','POST'])
 def mainpage_template(request):
     user = request.user
-    avatar='media/avatars/default.jpg'
+    if user.is_authenticated:
+        avatar = user.avatars.avatar
+    else:
+        avatar = 'media/avatars/default.jpg'
+
     videos = management.objects.all().order_by('?')[:10]
-    return render(request, "default_mainpage.html", {'videos':videos,'user':user,'avatar':avatar})
+    return render(request, "default_mainpage.html", {'videos': videos, 'user': user, 'avatar': avatar})
 
 
 def sign_in(request):
