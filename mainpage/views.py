@@ -24,11 +24,6 @@ def mainpage_template(request):
     return render(request, "default_mainpage.html", {'videos': videos, 'user': user, 'avatar': avatar})
 
 
-def mainpage_template2(request):
-    avatar = 'media/avatars/default.jpg'
-    videos = management.objects.all().order_by('?')[:10]
-    return render(request, "default_mainpage.html", {'videos': videos, 'user': user, 'avatar': avatar})
-
 
 def sign_in(request):
     if request.method == "POST":
