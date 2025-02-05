@@ -16,7 +16,7 @@ from django.core.mail import send_mail
 @require_http_methods(['GET','POST'])
 def mainpage_template(request):
     user = request.user
-    avatar=user.avatars.avatar
+    avatar='media/avatars/default.jpg'
     videos = management.objects.all().order_by('?')[:10]
     return render(request, "default_mainpage.html", {'videos':videos,'user':user,'avatar':avatar})
 
