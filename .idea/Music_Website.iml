@@ -16,7 +16,7 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Remote Python 3.9.20 (sftp://ec2-user@18.216.239.4:22/home/ec2-user/.virtualenvs/Music_Website/bin/python)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.12 (Music_Website)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TemplatesService">
