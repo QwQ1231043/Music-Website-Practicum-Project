@@ -23,14 +23,16 @@ from django.conf import settings
 from django.conf.urls.static import static
 from user.models import *
 import os
+
+
 def default_page(request):
     user = request.user
     avatar_path = os.path.join(settings.MEDIA_URL, 'avatars/default.jpg')
-    if user is None:
-        avatar=user.avatars.avatar
+    if user.is_authenticated:
+        avatar = user.avatars.avatar if hasattr(user, 'avatars') else avatar_path
     else:
-        avatar = os.path.join(settings.MEDIA_URL, 'avatars/default.jpg')
-    return render(request,'mainpage_template.html',{'avatar':avatar,'user':user})
+        avatar = avatar_path
+    return render(request, 'mainpage_template.html', {'avatar': avatar, 'user': user})
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('mainpage/',include('mainpage.urls')),
