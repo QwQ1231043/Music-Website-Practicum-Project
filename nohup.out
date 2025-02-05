@@ -1,0 +1,176 @@
+[2025-02-04 02:38:07 +0000] [33789] [INFO] Starting gunicorn 23.0.0
+[2025-02-04 02:38:07 +0000] [33789] [INFO] Listening at: http://0.0.0.0:8000 (33789)
+[2025-02-04 02:38:07 +0000] [33789] [INFO] Using worker: sync
+[2025-02-04 02:38:07 +0000] [33790] [INFO] Booting worker with pid: 33790
+[2025-02-04 02:38:07 +0000] [33791] [INFO] Booting worker with pid: 33791
+[2025-02-04 02:38:07 +0000] [33792] [INFO] Booting worker with pid: 33792
+[2025-02-04 02:38:21 +0000] [33793] [INFO] Starting gunicorn 23.0.0
+[2025-02-04 02:38:21 +0000] [33793] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2025-02-04 02:38:21 +0000] [33793] [ERROR] connection to ('0.0.0.0', 8000) failed: [Errno 98] Address already in use
+[2025-02-04 02:38:22 +0000] [33793] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2025-02-04 02:38:22 +0000] [33793] [ERROR] connection to ('0.0.0.0', 8000) failed: [Errno 98] Address already in use
+[2025-02-04 02:38:23 +0000] [33793] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2025-02-04 02:38:23 +0000] [33793] [ERROR] connection to ('0.0.0.0', 8000) failed: [Errno 98] Address already in use
+[2025-02-04 02:38:24 +0000] [33793] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2025-02-04 02:38:24 +0000] [33793] [ERROR] connection to ('0.0.0.0', 8000) failed: [Errno 98] Address already in use
+[2025-02-04 02:38:25 +0000] [33793] [ERROR] Connection in use: ('0.0.0.0', 8000)
+[2025-02-04 02:38:25 +0000] [33793] [ERROR] connection to ('0.0.0.0', 8000) failed: [Errno 98] Address already in use
+[2025-02-04 02:38:26 +0000] [33793] [ERROR] Can't connect to ('0.0.0.0', 8000)
+[2025-02-04 02:38:41 +0000] [33789] [INFO] Handling signal: term
+[2025-02-04 02:38:41 +0000] [33790] [INFO] Worker exiting (pid: 33790)
+[2025-02-04 02:38:41 +0000] [33791] [INFO] Worker exiting (pid: 33791)
+[2025-02-04 02:38:41 +0000] [33792] [INFO] Worker exiting (pid: 33792)
+[2025-02-04 02:38:41 +0000] [33789] [ERROR] Worker (pid:33792) was sent SIGTERM!
+[2025-02-04 02:38:41 +0000] [33789] [ERROR] Worker (pid:33791) was sent SIGTERM!
+[2025-02-04 02:38:41 +0000] [33789] [ERROR] Worker (pid:33790) was sent SIGTERM!
+[2025-02-04 02:38:41 +0000] [33789] [INFO] Shutting down: Master
+[2025-02-04 02:38:47 +0000] [33795] [INFO] Starting gunicorn 23.0.0
+[2025-02-04 02:38:47 +0000] [33795] [INFO] Listening at: http://0.0.0.0:8000 (33795)
+[2025-02-04 02:38:47 +0000] [33795] [INFO] Using worker: sync
+[2025-02-04 02:38:47 +0000] [33796] [INFO] Booting worker with pid: 33796
+[2025-02-04 02:38:47 +0000] [33797] [INFO] Booting worker with pid: 33797
+[2025-02-04 02:38:47 +0000] [33798] [INFO] Booting worker with pid: 33798
+Invalid HTTP_HOST header: '18.216.239.4'. You may need to add '18.216.239.4' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/utils/deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/http/request.py", line 148, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.216.239.4'. You may need to add '18.216.239.4' to ALLOWED_HOSTS.
+Bad Request: /robots.txt
+Invalid HTTP_HOST header: '18.216.239.4'. You may need to add '18.216.239.4' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/utils/deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/http/request.py", line 148, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.216.239.4'. You may need to add '18.216.239.4' to ALLOWED_HOSTS.
+Bad Request: /
+Invalid HTTP_HOST header: '18.216.239.4'. You may need to add '18.216.239.4' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/utils/deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/http/request.py", line 148, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.216.239.4'. You may need to add '18.216.239.4' to ALLOWED_HOSTS.
+Bad Request: /
+Invalid HTTP_HOST header: '18.216.239.4'. You may need to add '18.216.239.4' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/utils/deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/http/request.py", line 148, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.216.239.4'. You may need to add '18.216.239.4' to ALLOWED_HOSTS.
+Bad Request: /favicon.ico
+Invalid HTTP_HOST header: '18.216.239.4'. You may need to add '18.216.239.4' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/utils/deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/http/request.py", line 148, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.216.239.4'. You may need to add '18.216.239.4' to ALLOWED_HOSTS.
+Bad Request: /
+[2025-02-04 02:43:23 +0000] [33795] [INFO] Handling signal: term
+[2025-02-04 02:43:23 +0000] [33796] [INFO] Worker exiting (pid: 33796)
+[2025-02-04 02:43:23 +0000] [33797] [INFO] Worker exiting (pid: 33797)
+[2025-02-04 02:43:23 +0000] [33798] [INFO] Worker exiting (pid: 33798)
+[2025-02-04 02:43:23 +0000] [33795] [ERROR] Worker (pid:33797) was sent SIGTERM!
+[2025-02-04 02:43:23 +0000] [33795] [ERROR] Worker (pid:33798) was sent SIGTERM!
+[2025-02-04 02:43:23 +0000] [33795] [ERROR] Worker (pid:33796) was sent SIGTERM!
+[2025-02-04 02:43:23 +0000] [33795] [INFO] Shutting down: Master
+[2025-02-04 02:43:48 +0000] [34016] [INFO] Starting gunicorn 23.0.0
+[2025-02-04 02:43:48 +0000] [34016] [INFO] Listening at: http://0.0.0.0:8000 (34016)
+[2025-02-04 02:43:48 +0000] [34016] [INFO] Using worker: sync
+[2025-02-04 02:43:48 +0000] [34017] [INFO] Booting worker with pid: 34017
+[2025-02-04 02:43:48 +0000] [34018] [INFO] Booting worker with pid: 34018
+[2025-02-04 02:43:48 +0000] [34019] [INFO] Booting worker with pid: 34019
+Invalid HTTP_HOST header: '18.216.239.4'. You may need to add '18.216.239.4' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/utils/deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/http/request.py", line 148, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.216.239.4'. You may need to add '18.216.239.4' to ALLOWED_HOSTS.
+Bad Request: /
+Invalid HTTP_HOST header: '18.216.239.4'. You may need to add '18.216.239.4' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/utils/deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/http/request.py", line 148, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.216.239.4'. You may need to add '18.216.239.4' to ALLOWED_HOSTS.
+Bad Request: /favicon.ico
+Invalid HTTP_HOST header: '18.216.239.4'. You may need to add '18.216.239.4' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/utils/deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/http/request.py", line 148, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.216.239.4'. You may need to add '18.216.239.4' to ALLOWED_HOSTS.
+Bad Request: /
+Invalid HTTP_HOST header: '18.216.239.4'. You may need to add '18.216.239.4' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/utils/deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/ec2-user/my_music_project/Music_Website/venv/lib64/python3.9/site-packages/django/http/request.py", line 148, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.216.239.4'. You may need to add '18.216.239.4' to ALLOWED_HOSTS.
+Bad Request: /favicon.ico
+[2025-02-04 02:48:40 +0000] [34016] [INFO] Handling signal: term
+[2025-02-04 02:48:40 +0000] [34017] [INFO] Worker exiting (pid: 34017)
+[2025-02-04 02:48:40 +0000] [34018] [INFO] Worker exiting (pid: 34018)
+[2025-02-04 02:48:40 +0000] [34019] [INFO] Worker exiting (pid: 34019)
+[2025-02-04 02:48:40 +0000] [34016] [ERROR] Worker (pid:34017) was sent SIGTERM!
+[2025-02-04 02:48:40 +0000] [34016] [ERROR] Worker (pid:34019) was sent SIGTERM!
+[2025-02-04 02:48:40 +0000] [34016] [ERROR] Worker (pid:34018) was sent SIGTERM!
+[2025-02-04 02:48:40 +0000] [34016] [INFO] Shutting down: Master
+[2025-02-04 02:48:40 +0000] [34159] [INFO] Starting gunicorn 23.0.0
+[2025-02-04 02:48:40 +0000] [34159] [INFO] Listening at: http://0.0.0.0:8000 (34159)
+[2025-02-04 02:48:40 +0000] [34159] [INFO] Using worker: sync
+[2025-02-04 02:48:40 +0000] [34160] [INFO] Booting worker with pid: 34160
+[2025-02-04 02:48:40 +0000] [34161] [INFO] Booting worker with pid: 34161
+[2025-02-04 02:48:40 +0000] [34162] [INFO] Booting worker with pid: 34162
+[2025-02-04 02:49:05 +0000] [34159] [INFO] Handling signal: term
+[2025-02-04 02:49:05 +0000] [34160] [INFO] Worker exiting (pid: 34160)
+[2025-02-04 02:49:05 +0000] [34161] [INFO] Worker exiting (pid: 34161)
+[2025-02-04 02:49:05 +0000] [34162] [INFO] Worker exiting (pid: 34162)
+[2025-02-04 02:49:05 +0000] [34159] [ERROR] Worker (pid:34160) was sent SIGTERM!
+[2025-02-04 02:49:05 +0000] [34159] [ERROR] Worker (pid:34161) was sent SIGTERM!
+[2025-02-04 02:49:05 +0000] [34159] [ERROR] Worker (pid:34162) was sent SIGTERM!
+[2025-02-04 02:49:05 +0000] [34159] [INFO] Shutting down: Master
