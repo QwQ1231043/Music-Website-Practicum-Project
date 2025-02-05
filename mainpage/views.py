@@ -13,16 +13,6 @@ from mainpage.forms import *
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 # Create your views here.
-@require_http_methods(['GET','POST'])
-def mainpage_template(request):
-    user = request.user
-    if user.is_authenticated:
-        avatar = user.avatars.avatar
-    else:
-        avatar = 'media/avatars/default.jpg'
-    videos = management.objects.all().order_by('?')[:10]
-    return render(request, "default_mainpage.html", {'videos': videos, 'user': user, 'avatar': avatar})
-
 
 def mainpage_template2(request):
     avatar = 'media/avatars/default.jpg'

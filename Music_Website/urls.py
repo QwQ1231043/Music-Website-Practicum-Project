@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.contrib.auth import authenticate
 from django.urls import path,include
 from django.shortcuts import render,HttpResponse
-from mainpage.views import mainpage_template
+from mainpage.views import mainpage_template2
 from django.conf import settings
 from django.conf.urls.static import static
 from user.models import *
