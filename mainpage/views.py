@@ -15,9 +15,6 @@ from django.core.mail import send_mail
 # Create your views here.
 
 
-def mainpage_template3(request):
-    return render(request, "default_mainpage.html")
-
 def sign_in(request):
     if request.method == "POST":
         email = request.POST.get('email')
