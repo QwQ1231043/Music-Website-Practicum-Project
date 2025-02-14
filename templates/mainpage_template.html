@@ -48,7 +48,7 @@
             box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
             height: 100vh;
             padding-top: 30px;
-            width: 300px;
+            min-width: 300px;
             transition: all 0.3s ease;
         }
 
@@ -187,10 +187,8 @@
                 <span class="fs-4 text-white">Music Website</span>
             </a>
             <ul class="nav nav-pills">
-                <li class="nav-item"><a href="{% url 'mainpage:user_mainpage' %}" class="nav-link active" aria-current="page">Home</a></li>
+                <li class="nav-item"><a href="{% url 'user:about_us' %}" class="nav-link active" aria-current="page">About us</a></li>
                 <li class="nav-item"></li>
-                <li class="nav-item"></li>
-                <li class="nav-item"><a href="#" class="nav-link">About</a></li>
             </ul>
         </header>
 
@@ -235,6 +233,14 @@
                             </svg><span>Friends</span>
                         </a>
                     </li>
+                                <li>
+                        <a href="{% url 'mainpage:user_mainpage' %}" class="nav-link">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+  <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5"/>
+</svg><span>Home</span>
+                        </a>
+                    </li>
+                    
                 </ul>
                 <hr>
                 <div class="dropdown">
@@ -244,7 +250,6 @@
                     </a>
                     <ul class="dropdown-menu text-small shadow">
                         <li><a class="dropdown-item" href="{% url 'user:profile' %}">Profile</a></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{% url 'mainpage:sign_out' %}">Sign out</a></li>
                     </ul>
@@ -267,10 +272,7 @@
             </a>
             <ul class="nav nav-pills">
                 <li class="nav-item"><a href="{% url 'mainpage:mainpage_template' %}" class="nav-link active" aria-current="page">Home</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="{% url 'user:about_us' %}" class="nav-link">About us</a></li>
             </ul>
         </header>
 
@@ -282,6 +284,7 @@
                 <p>Welcome to our music website. Please sign up or sign in to explore more.</p>
                 <a href="{% url 'mainpage:sign_up' %}" class="btn btn-custom">Sign up</a>
                 <a href="{% url 'mainpage:sign_in' %}" class="btn btn-custom">Sign in</a>
+           
                 <hr>
             </div>
 
@@ -304,11 +307,11 @@
 <footer class="bg-dark text-white py-4 mt-5">
     <div class="container">
         <div class="row">
-            <!-- 网站版权信息 -->
+   
             <div class="col-md-6">
                 <p class="mb-0">© 2025 Music Website. All Rights Reserved.</p>
             </div>
-            <!-- 社交媒体链接 -->
+
             <div class="col-md-6 text-md-end">
                 <a href="#" class="text-white me-3">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">

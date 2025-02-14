@@ -75,7 +75,21 @@
                                 <p class="video-uploader" style="font-size: 0.9rem; color: #777; font-style: italic; margin-top: 5px;">
                                     Uploaded by: {{ obj.video.user.username }} 👤
                                 </p>
-                                <a href="{{ obj.video.get_absolute_url }}" class="btn btn-primary btn-sm" style="font-size: 0.9rem; padding: 5px 12px; border-radius: 20px; background-color: #007bff; color: #fff;">Watch</a>
+                               <form method="POST" action="{% url 'user:view_specific_video' obj.video.id %}" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-watch" style="
+        background-color: #4CAF50; 
+        color: white; 
+        border: none; 
+        padding: 10px 20px; 
+        font-size: 16px;
+        border-radius: 30px; 
+        cursor: pointer; 
+        transition: background-color 0.3s, box-shadow 0.3s; 
+    ">
+        Watch
+    </button>
+</form>
                             </div>
                         </div>
                     </div>

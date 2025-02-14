@@ -19,7 +19,8 @@ urlpatterns=[
     path('friend/<int:friend_id>/', views.friend_page, name='friend_page'),
     path('video_page/<int:video_id>/',views.view_specific_video,name='view_specific_video'),
 path('delete_video/<int:video_id>/', views.delete_video, name='delete_video'),
-path('delete_video_from_folder/<int:folder_id>/<int:video_id>/', views.delete_video_from_folder, name='delete_video_from_folder')
+path('delete_video_from_folder/<int:folder_id>/<int:video_id>/', views.delete_video_from_folder, name='delete_video_from_folder'),
+path('about_us',views.about_us,name="about_us"),
 
 ]
 if settings.DEBUG:

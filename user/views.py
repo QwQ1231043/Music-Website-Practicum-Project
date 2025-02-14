@@ -303,7 +303,10 @@ def view_specific_video(request, video_id):
     avatar = request.user.avatars.avatar
     comments_list = video.comments.all()
     all_videos = list(management.objects.exclude(id=video_id))
-    recommended_videos = random.sample(all_videos, 5)
+    if len(all_videos) <5:
+        recommended_videos=all_videos
+    else:
+        recommended_videos = random.sample(all_videos, 5)
     liked_video = likess.objects.filter(video=video, user=request.user).exists()
     if request.method == "POST":
         if 'like' in request.POST:
@@ -322,3 +325,12 @@ def view_specific_video(request, video_id):
         'recommended_videos': recommended_videos,
         'liked_video': liked_video
     })
+
+def about_us(request):
+    if request.user.is_authenticated:
+        user=request.user
+        avatar=user.avatars.avatar
+        return render(request, 'about_us.html', {"avatar": avatar, "user": user})
+    else:
+        avatar='avatars/default.jpg'
+        return render(request,'about_us.html',{"avatar":avatar})
